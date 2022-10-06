@@ -63,7 +63,8 @@ const SignUp = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <img src="bikerides-logo.svg" width="50%" style={{ paddingBottom: 35 }}/>
+                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">

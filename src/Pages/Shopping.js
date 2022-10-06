@@ -17,7 +17,7 @@ export default function Shopping() {
 
   return (
     <Box margin="auto" maxWidth="1920px">
-      <Hero title="Shopping" />
+      <Hero title="Shopping" desc="This is page for shopping items."/>
 
       <Box style={{ width: 'auto', margin: 'auto', backgroundColor: 'white', padding: 10, borderRadius: 16, maxWidth: '1380px' }}>
 

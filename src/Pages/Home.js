@@ -44,7 +44,7 @@ export default function Home() {
   
   return (
     <div> 
-      <Hero title={user.email}/>
+      <Hero title='Home'/>
       
     </div>
   )

@@ -14,10 +14,14 @@ import { IconButton } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
+import ListItemText from '@mui/material/ListItemText';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import Box from '@mui/material/Box';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
+import Drawer from '@mui/material/Drawer';
 import Logout from '@mui/icons-material/Logout';
 import { blue } from '@mui/material/colors';
 
@@ -38,7 +42,7 @@ export default function Navbar() {
     };
 
     const { logout } = UserAuth();
-    
+
     const { user } = UserAuth();
 
     const navigate = useNavigate();
@@ -46,7 +50,21 @@ export default function Navbar() {
     const navigateToProfile = () => {
         // 👇️ navigate to /contacts
         navigate('/Profile');
-      };
+    };
+
+    // Drawer
+    const [state, setState] = useState({
+        right: false
+    });
+
+    const toggleDrawer = (anchor, open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setState({ ...state, [anchor]: open });
+    };
+
 
     const handleLogout = async () => {
         handleClose();
@@ -65,9 +83,92 @@ export default function Navbar() {
         navRef.current.classList.toggle("responsive_nav");
     }
 
+    // Priekš Drawer
+    const list = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300 }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+
+            <List>
+                <ListItem sx={{ justifyContent: "end" }}>
+                    <button className="nav-btn" onClick={toggleDrawer("right", true)}>
+                        <FaTimes />
+                    </button>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemText primary="Shopping" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton>
+                        <ListItemText primary="Groups" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemText primary="About" />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <Divider />
+            <List>
+  
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemIcon>
+                                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
+                        </ListItemIcon>
+                        <ListItemText primary="Profile" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemIcon>
+                            <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
+                        </ListItemIcon>
+                        <ListItemText primary="My Account" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemIcon>
+                            <PersonAdd fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Add another account" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemIcon>
+                            <Settings fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Settings" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem >
+                    <ListItemButton >
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Logout" />
+                    </ListItemButton>
+                </ListItem>
 
 
-    return (location.pathname != '/SignIn' && location.pathname != '/SignUp') ? (
+
+            </List>
+
+        </Box>
+    );
+
+
+
+
+    return (user && (location.pathname != '/SignIn' && location.pathname != '/SignUp')) ? (
 
 
         <header>
@@ -94,12 +195,12 @@ export default function Navbar() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
             >
-                <Avatar  sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
+                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
             </IconButton>
 
 
 
-            <div sx={{ borderRadius: "25px" }}>
+            <div className="desktop-profile-icon" sx={{ borderRadius: "25px" }}>
 
                 <Menu
                     anchorEl={anchorEl}
@@ -136,11 +237,11 @@ export default function Navbar() {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    <MenuItem  onClick={navigateToProfile} >
-                    <Avatar  sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar> Profile
+                    <MenuItem onClick={navigateToProfile} >
+                        <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar> Profile
                     </MenuItem>
                     <MenuItem>
-                    <Avatar  sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>My account
+                        <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>My account
                     </MenuItem>
                     <Divider />
                     <MenuItem>
@@ -155,7 +256,7 @@ export default function Navbar() {
                         </ListItemIcon>
                         Settings
                     </MenuItem>
-                    <MenuItem  onClick={handleLogout}>
+                    <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>
@@ -166,9 +267,17 @@ export default function Navbar() {
 
 
 
-            <button className="nav-btn" onClick={showNavbar}>
+            <button className="nav-btn" onClick={toggleDrawer("right", true)}>
                 <FaBars />
             </button>
+            <Drawer
+                anchor={"right"}
+                open={state["right"]}
+                onClose={toggleDrawer("right", false)}
+                on
+            >
+                {list("right")}
+            </Drawer>
         </header>
     ) : null
 }
@@ -176,7 +285,7 @@ export default function Navbar() {
 function CustomLink({ to, children, ...props }) {
     const resolvedPath = useResolvedPath(to)
     const isActive = useMatch({ path: resolvedPath.pathname, end: true })
-    
+
     return (
         <li className={isActive ? "active" : ""}>
             <Link to={to} {...props}>

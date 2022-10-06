@@ -10,11 +10,13 @@ import Profile from './Pages/Profile';
 import PageNotFound from './Pages/PageNotFound';
 import React from 'react';
 import { Route, Routes, useLocation } from "react-router-dom"
-import { AuthContextProvider } from "./Config/AuthContext";
+import { AuthContextProvider, user, UserAuth } from "./Config/AuthContext";
 import PrivateRoute from "./Config/PrivateRoute";
 import AuthenticatedRoute from "./Config/AuthenticatedRoute";
 import SplashScreen from "./Components/SplashScreen"
-
+import { createContext, useContext, useEffect, useState } from 'react';
+import {   onAuthStateChanged } from 'firebase/auth';
+import { auth } from './Config/firebase-config.js';
 
 
 function App() {
@@ -22,22 +24,24 @@ function App() {
   const location = useLocation();
   console.log(location);
 
+  const { user } = UserAuth();
+  console.log('APP user: '+user)
+
   return (
 
+    
+    <div className={(location.pathname != '/SignIn' && location.pathname != '/SignUp') ? "container" : ""}>
 
-    <div className="container">
-      <AuthContextProvider>
+
         
         <Navbar />
 
         <Routes>
-          <Route index element={<PrivateRoute> <Home /> </PrivateRoute>} />
-
+          
           <Route path='/signin' element={<AuthenticatedRoute children={<SignIn />} />} />
           <Route path='/signup' element={<AuthenticatedRoute children={<SignUp />} />} />
-
           <Route path='/splash' element={<SplashScreen />} />
-
+          
           <Route path='/' element={<PrivateRoute children={<Home />} />} />
           <Route path='/Home' element={<PrivateRoute> <Home /> </PrivateRoute>} />
           <Route path='/Shopping' element={<PrivateRoute> <Shopping /> </PrivateRoute>} />
@@ -48,8 +52,10 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
 
           <Route path='/ShoppingItem/:title' element={<PrivateRoute> <ShoppingItem /> </PrivateRoute>} />
+        
+
         </Routes>
-      </AuthContextProvider>
+
     </div>
 
 

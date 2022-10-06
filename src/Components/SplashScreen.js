@@ -16,14 +16,16 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 export default function SplashScreen() {
     return (
-        <Box sx={{ width: "auto", height: "auto" , margin: "40%  10%  0% 10%"}}>
-            <Box sx={{ paddingBottom: 2 }}>
-                <img width="30%" src="bikerides-logo.svg" />
+        <div className="container">
+            <Box sx={{ width: "auto", height: "auto", margin: "40%  10%  0% 10%" }}>
+                <Box sx={{ paddingBottom: 2 }}>
+                    <img width="30%" src="bikerides-logo.svg" />
+                </Box>
+                <Box width="30%" margin="auto">
+                    <LinearProgress />
+                </Box>
+
             </Box>
-            <Box width="30%" margin="auto">
-                 <LinearProgress />
-            </Box>
-            
-        </Box>
+        </div>
     );
 }

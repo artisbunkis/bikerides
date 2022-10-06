@@ -6,12 +6,16 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import { auth } from './firebase-config.js';
+import SplashScreen from '../Components/SplashScreen.js';
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
+  const [loading, setLoading] = useState(true);
+  
+  console.log('auth: '+user)
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -24,22 +28,27 @@ export const AuthContextProvider = ({ children }) => {
       return signOut(auth)
   }
 
-  const [loading,setLoading] = useState(true);
+
 
   useEffect(() => {
-    setLoading(true);
+    console.log('laadee user');
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       //console.log(currentUser.email);
+      console.log('IELOGOJIES IR OK')
       console.log(currentUser);
       setUser(currentUser);
+      setLoading(false);
     });
     return () => {
+
       unsubscribe();
-      setLoading(false);
+
+      console.log('gatavs');
     };
   }, []);
 
-  return (
+  return loading ? <SplashScreen/> : (
     <UserContext.Provider value={{ createUser, user, logout, signIn }}>
       {children}
     </UserContext.Provider>
@@ -49,3 +58,4 @@ export const AuthContextProvider = ({ children }) => {
 export const UserAuth = () => {
   return useContext(UserContext);
 };
+
