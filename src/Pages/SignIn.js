@@ -16,14 +16,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SplashScreen from "../Components/SplashScreen"
-
+import { purple, red } from '@mui/material/colors';
 
 const theme = createTheme();
 
 
 
 const SignIn = () => {
-
+    const redColor = red[500]; // #f44336
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -42,7 +42,8 @@ const SignIn = () => {
             setLoading(false);
         } catch (e) {
             setError(e.message)
-            console.log(e.message)
+            setLoading(false)
+            console.log(e)
         }
     };
 
@@ -108,6 +109,7 @@ const SignIn = () => {
                                     id="password"
                                     autoComplete="current-password"
                                 />
+                                {error?<Typography variant="subtitle2" color={redColor} textAlign={"center"} padding={"10px 0px 20px 0px"}>The email or password did not match. Please try again.</Typography>:null} 
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
                                     label="Remember me"
@@ -130,6 +132,7 @@ const SignIn = () => {
                                         <Link href="/SignUp" variant="body2">
                                             Don't have an account? Sign Up!
                                         </Link>
+                                          
                                     </Grid>
                                 </Grid>
 
