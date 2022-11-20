@@ -8,7 +8,6 @@
         "**/Thumbs.db": true,
         ".gitignore": true,
         "package-lock.json": true,
-
         "src/Components/Navbar-old.js": true
     },
     "hide-files.files": [

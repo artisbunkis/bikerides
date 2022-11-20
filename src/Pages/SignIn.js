@@ -17,6 +17,8 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SplashScreen from "../Components/SplashScreen"
 import { purple, red } from '@mui/material/colors';
+import { db } from "../Config/firebase-config";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 const theme = createTheme();
 
@@ -29,8 +31,101 @@ const SignIn = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const { signIn } = UserAuth();
+    const { signInWithGoogle } = UserAuth();
 
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+
+
+
+    const handleGoogle = async (e) => {
+        e.preventDefault();
+        setError('')
+        try {
+            setLoading(true);
+            const res = await signInWithGoogle()
+            const recordExists = doc(db, "users", res.user.uid).exists;
+
+            console.log(recordExists)
+            console.log(res.user.uid)
+
+            const userProfileRef = doc(db, "users", res.user.uid);
+            const docSnap = await getDoc(userProfileRef);
+
+            if (docSnap.exists()) {
+                // console.log("Document data:", docSnap.data())
+                console.log('exists')
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!")
+                setDoc(doc(db, "users", res.user.uid), {
+                    birthDate: null,
+                    email: res.user.email,
+                    firstName: null,
+                    lastName: null,
+                    gender: "Unknown",
+                    phoneNumber: null,
+                    userName: res.user.displayName,
+                    country: null,
+                    city: null,
+                    photoURL: res.user.photoURL
+                });
+            }
+
+
+
+
+            /*usersRef.doc(res.user.uid).get()
+                .then((docSnapshot) => {
+                    if (docSnapshot.exists) {
+                        usersRef.onSnapshot((doc) => {
+                            console.log('ir useris')
+                            // do stuff with the data
+                        });
+                    } else {
+                        console.log('nav')
+                        //usersRef.set({ ... }) // create the document
+                        setDoc(doc(db, "users", res.user.uid), {
+                            birthDate: null,
+                            email: res.user.email,
+                            firstName: null,
+                            lastName: null,
+                            gender: "Unknown",
+                            phoneNumber: null,
+                            userName: res.user.displayName,
+                            country: null,
+                            city: null,
+                            photoURL: res.user.photoURL
+                        });
+                    }
+                });*/
+
+
+
+            // Sets initial data in users collection for user with uid:
+            /*if (1 == 1) {
+                setDoc(doc(db, "users", res.user.uid), {
+                    birthDate: null,
+                    email: res.user.email,
+                    firstName: null,
+                    lastName: null,
+                    gender: "Unknown",
+                    phoneNumber: null,
+                    userName: res.user.displayName,
+                    country: null,
+                    city: null,
+                    photoURL: res.user.photoURL
+                });
+            }*/
+
+            navigate('/')
+            setLoading(false);
+        } catch (e) {
+            setError(e.message)
+            setLoading(false)
+            console.log(e)
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,98 +143,104 @@ const SignIn = () => {
     };
 
     return (
-        
+
         <div className='container-signin'>
             <ThemeProvider theme={theme}>
-                {loading ? <SplashScreen/> : 
-                <Grid container component="main" sx={{ height: '100vh' }}>
-                    <CssBaseline />
-                    <Grid
-                        item
-                        xs={false}
-                        sm={4}
-                        md={7}
-                        sx={{
-                            backgroundImage: 'url(https://source.unsplash.com/random)',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundColor: (t) =>
-                                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}
-                    />
-                    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                        <Box
+                {loading ? <SplashScreen /> :
+                    <Grid container component="main" sx={{ height: '100vh' }}>
+                        <CssBaseline />
+                        <Grid
+                            item
+                            xs={false}
+                            sm={4}
+                            md={7}
                             sx={{
-                                my: 8,
-                                mx: 4,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
+                                backgroundImage: 'url(https://source.unsplash.com/user/tomphotocycling)',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundColor: (t) =>
+                                    t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
                             }}
-                        >
-                           
-                            <img src="bikerides-logo.svg" width="50%" style={{ paddingBottom: 35 }}/>
-                            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                                <LockOutlinedIcon />
-                            </Avatar>
-                            <Typography component="h1" variant="h5">
-                                Sign in
-                            </Typography>
-                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                                <TextField
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                />
-                                <TextField
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                />
-                                {error?<Typography variant="subtitle2" color={redColor} textAlign={"center"} padding={"10px 0px 20px 0px"}>The email or password did not match. Please try again.</Typography>:null} 
-                                <FormControlLabel
-                                    control={<Checkbox value="remember" color="primary" />}
-                                    label="Remember me"
-                                />
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    sx={{ mt: 3, mb: 2 }}
-                                >
-                                    Sign In
-                                </Button>
-                                <Grid container>
-                                    <Grid item xs>
-                                        <Link href="#" variant="body2">
-                                            Forgot password?
-                                        </Link>
-                                    </Grid>
-                                    <Grid item>
-                                        <Link href="/SignUp" variant="body2">
-                                            Don't have an account? Sign Up!
-                                        </Link>
-                                          
-                                    </Grid>
-                                </Grid>
+                        />
+                        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                            <Box
+                                sx={{
+                                    my: 8,
+                                    mx: 4,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                }}
+                            >
 
+                                <img src="bikerides-logo.svg" width="50%" style={{ paddingBottom: 35 }} />
+                                <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                                    {email ? email.charAt(0).toUpperCase() : <LockOutlinedIcon />}
+                                </Avatar>
+                                <Typography component="h1" variant="h5">
+                                    Sign in
+                                </Typography>
+                                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                                    <TextField
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        name="email"
+                                        autoComplete="email"
+                                        autoFocus
+                                    />
+                                    <TextField
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                    />
+                                    {error ? <Typography variant="subtitle2" color={redColor} textAlign={"center"} padding={"10px 0px 20px 0px"}>The email or password did not match. Please try again.</Typography> : null}
+                                    <FormControlLabel
+                                        control={<Checkbox value="remember" color="primary" />}
+                                        label="Remember me"
+                                    />
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        sx={{ mt: 3, mb: 2 }}
+                                    >
+                                        Sign In
+                                    </Button>
+                                    <Button variant="outlined" startIcon={<img width="16px" src="google.svg"></img>} onClick={handleGoogle}
+                                        fullWidth
+                                        sx={{ mt: 3, mb: 2, verticalAlign: 'center', marginTop: 0 }}>
+                                        Sign in with Google
+                                    </Button>
+
+                                    <Grid container>
+                                        <Grid item xs>
+                                            <Link href="#" variant="body2">
+                                                Forgot password?
+                                            </Link>
+                                        </Grid>
+                                        <Grid item>
+                                            <Link href="/SignUp" variant="body2">
+                                                Don't have an account? Sign Up!
+                                            </Link>
+
+                                        </Grid>
+                                    </Grid>
+
+                                </Box>
                             </Box>
-                        </Box>
-                    </Grid>
-                </Grid> }
+                        </Grid>
+                    </Grid>}
             </ThemeProvider>
         </div>
     );

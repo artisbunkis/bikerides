@@ -20,6 +20,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Box from '@mui/material/Box';
 import PersonAdd from '@mui/icons-material/PersonAdd';
+import Person from '@mui/icons-material/Person';
 import Settings from '@mui/icons-material/Settings';
 import Drawer from '@mui/material/Drawer';
 import Logout from '@mui/icons-material/Logout';
@@ -50,6 +51,22 @@ export default function Navbar() {
     const navigateToProfile = () => {
         // 👇️ navigate to /contacts
         navigate('/Profile');
+    };
+    const navigateToHome = () => {
+        // 👇️ navigate to /contacts
+        navigate('/');
+    };
+    const navigateToShopping = () => {
+        // 👇️ navigate to /contacts
+        navigate('/Shopping');
+    };
+    const navigateToAbout = () => {
+        // 👇️ navigate to /contacts
+        navigate('/About');
+    };
+    const navigateToGroups = () => {
+        // 👇️ navigate to /contacts
+        navigate('/Groups');
     };
 
     // Drawer
@@ -98,18 +115,18 @@ export default function Navbar() {
                         <FaTimes />
                     </button>
                 </ListItem>
-                <ListItem >
+                <ListItem onClick={navigateToShopping}>
                     <ListItemButton >
                         <ListItemText primary="Shopping" />
                     </ListItemButton>
                 </ListItem>
-                <ListItem >
+                <ListItem onClick={navigateToGroups}>
                     <ListItemButton>
                         <ListItemText primary="Groups" />
                     </ListItemButton>
                 </ListItem>
                 <ListItem >
-                    <ListItemButton >
+                    <ListItemButton onClick={navigateToAbout}>
                         <ListItemText primary="About" />
                     </ListItemButton>
                 </ListItem>
@@ -117,10 +134,10 @@ export default function Navbar() {
             <Divider />
             <List>
   
-                <ListItem >
+                <ListItem onClick={navigateToProfile}>
                     <ListItemButton >
                         <ListItemIcon>
-                                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
+                                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar>
                         </ListItemIcon>
                         <ListItemText primary="Profile" />
                     </ListItemButton>
@@ -128,7 +145,7 @@ export default function Navbar() {
                 <ListItem >
                     <ListItemButton >
                         <ListItemIcon>
-                            <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
+                            <Person fontSize="small" />
                         </ListItemIcon>
                         <ListItemText primary="My Account" />
                     </ListItemButton>
@@ -149,7 +166,7 @@ export default function Navbar() {
                         <ListItemText primary="Settings" />
                     </ListItemButton>
                 </ListItem>
-                <ListItem >
+                <ListItem onClick={handleLogout}>
                     <ListItemButton >
                         <ListItemIcon>
                             <Logout fontSize="small" />
@@ -195,7 +212,7 @@ export default function Navbar() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
             >
-                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>
+                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar>
             </IconButton>
 
 
@@ -238,10 +255,13 @@ export default function Navbar() {
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                     <MenuItem onClick={navigateToProfile} >
-                        <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar> Profile
+                        <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar> Profile
                     </MenuItem>
                     <MenuItem>
-                        <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }}>{user ? (user.email ? user.email.charAt(0).toUpperCase() : '') : ''}</Avatar>My account
+                        <ListItemIcon>
+                            <Person fontSize="small" />
+                        </ListItemIcon>
+                        My account
                     </MenuItem>
                     <Divider />
                     <MenuItem>
@@ -273,6 +293,7 @@ export default function Navbar() {
             <Drawer
                 anchor={"right"}
                 open={state["right"]}
+
                 onClose={toggleDrawer("right", false)}
                 on
             >

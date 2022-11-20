@@ -2,23 +2,28 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   onAuthStateChanged,
+  updateProfile
 } from 'firebase/auth';
-import { auth } from './firebase-config.js';
+import { auth, googleProvider } from './firebase-config.js';
 import SplashScreen from '../Components/SplashScreen.js';
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+  
   const [user, setUser] = useState(null);
-
+  console.log('auth: '+user);
   const [loading, setLoading] = useState(true);
   
-  console.log('auth: '+user)
-  const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const createUser = (email, password, username, photo) => {
+
+    return createUserWithEmailAndPassword(auth, email, password)
   };
+
+ 
 
    const signIn = (email, password) =>  {
     return signInWithEmailAndPassword(auth, email, password)
@@ -28,6 +33,9 @@ export const AuthContextProvider = ({ children }) => {
       return signOut(auth)
   }
 
+  const signInWithGoogle = () => {
+    return signInWithPopup(auth, googleProvider);
+  }
 
 
   useEffect(() => {
@@ -49,7 +57,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return loading ? <SplashScreen/> : (
-    <UserContext.Provider value={{ createUser, user, logout, signIn }}>
+    <UserContext.Provider value={{ createUser, user, logout, signIn, signInWithGoogle, updateProfile }}>
       {children}
     </UserContext.Provider>
   );
@@ -58,4 +66,5 @@ export const AuthContextProvider = ({ children }) => {
 export const UserAuth = () => {
   return useContext(UserContext);
 };
+
 

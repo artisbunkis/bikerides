@@ -5,12 +5,12 @@ import { UserAuth } from '../Config/AuthContext';
 const AuthenticatedRoute = ({ children }) => {
   const { user } = UserAuth();
 
-  console.log(user);
+
   if (user!==null) {
-    console.log('AUTHROUTE loading now...')
+
     return <Navigate to='/' />;
   }
-  console.log("return children authroute");
+
   return children;
 };
 

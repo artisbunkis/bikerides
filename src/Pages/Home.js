@@ -45,7 +45,8 @@ export default function Home() {
   return (
     <div> 
       <Hero title='Home'/>
-      
+      <Hero title='Random' desc="Apraksts"/>
+      <ActionAreaCard image="google.svg"></ActionAreaCard>
     </div>
   )
 
