@@ -28,7 +28,6 @@ import { blue } from '@mui/material/colors';
 
 
 
-
 export default function Navbar() {
 
     const location = useLocation();
@@ -142,30 +141,7 @@ export default function Navbar() {
                         <ListItemText primary="Profile" />
                     </ListItemButton>
                 </ListItem>
-                <ListItem >
-                    <ListItemButton >
-                        <ListItemIcon>
-                            <Person fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary="My Account" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem >
-                    <ListItemButton >
-                        <ListItemIcon>
-                            <PersonAdd fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary="Add another account" />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem >
-                    <ListItemButton >
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary="Settings" />
-                    </ListItemButton>
-                </ListItem>
+    
                 <ListItem onClick={handleLogout}>
                     <ListItemButton >
                         <ListItemIcon>
@@ -189,7 +165,7 @@ export default function Navbar() {
 
 
         <header>
-            <Link to="/" className="site-title"><img src="bikerides-logo.svg" width="150px"></img></Link>
+            <Link to="/" className="site-title"><img src="https://svgshare.com/i/oWd.svg" width="150px"></img></Link>
             <nav className="nav" ref={navRef}>
 
                 <ul>
@@ -257,25 +233,8 @@ export default function Navbar() {
                     <MenuItem onClick={navigateToProfile} >
                         <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar> Profile
                     </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Person fontSize="small" />
-                        </ListItemIcon>
-                        My account
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem>
-                        <ListItemIcon>
-                            <PersonAdd fontSize="small" />
-                        </ListItemIcon>
-                        Add another account
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        Settings
-                    </MenuItem>
+
+                    <Divider/>
                     <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                             <Logout fontSize="small" />

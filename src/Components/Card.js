@@ -65,7 +65,7 @@ export default function ActionAreaCard(props) {
                     <Box>
                         <Grid container spacing={2} justifyContent="start" alignItems="center" marginLeft={0} marginBottom={1} paddingLeft="16px" paddingRight="16px" paddingBottom="12px">
                             <Grid item padding="0">
-                                <Avatar alt="Artis Bunkis" />
+                                <Avatar src={props.sellerPhoto} />
                             </Grid>
                             <Grid item padding="0" >
                                 <Typography variant="body2" color="text.secondary" textAlign={"left"}>

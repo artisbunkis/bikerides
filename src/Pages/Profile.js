@@ -551,7 +551,7 @@ export default function Profile() {
 
   return (
     <Box>
-      <Hero title="Profile" desc={'E-mail: ' + user.email + ' ' + user.displayName}  ></Hero>
+      <Hero title="Profile" desc={'E-mail: ' + user.email + ', Username: ' + user.displayName}  ></Hero>
 
       <Box component="form" noValidate onSubmit={handleSave} sx={{ bgcolor: "white", borderRadius: "16px", padding: "20px" }}>
 

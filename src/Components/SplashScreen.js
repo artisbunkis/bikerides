@@ -19,7 +19,7 @@ export default function SplashScreen() {
         <div className="container">
             <Box sx={{ width: "auto", height: "auto", margin: "40%  10%  0% 10%" }}>
                 <Box sx={{ paddingBottom: 2 }}>
-                    <img width="30%" src="bikerides-logo.svg" />
+                    <img width="30%" src="https://svgshare.com/i/oWd.svg" />
                 </Box>
                 <Box width="30%" margin="auto">
                     <LinearProgress />

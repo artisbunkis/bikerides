@@ -1,6 +1,7 @@
 import Navbar from "./Components/Navbar"
 import Shopping from "./Pages/Shopping"
 import ShoppingItem from "./Pages/ShoppingItem"
+import GroupItem from "./Pages/GroupItem"
 import Home from "./Pages/Home"
 import About from "./Pages/About"
 import SignIn from "./Pages/SignIn"
@@ -52,6 +53,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
 
           <Route path='/ShoppingItem/:title' element={<PrivateRoute> <ShoppingItem /> </PrivateRoute>} />
+          <Route path='/Group/:group_id' element={<PrivateRoute> <GroupItem /> </PrivateRoute>} />
         
 
         </Routes>
