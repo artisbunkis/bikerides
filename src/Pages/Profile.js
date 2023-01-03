@@ -20,6 +20,7 @@ import FormControl from '@mui/material/FormControl';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import axios from 'axios';
 
 
 export default function Profile() {
@@ -477,7 +478,7 @@ export default function Profile() {
   const imagesRef = ref(storage, `profileImages/${user.uid}/${selectedFile.name}`);
   const [imgUrl, setImgUrl] = useState(null);
 
-
+  
   // Get data from Firestore:
   const getData = async (e) => {
     const userProfileRef = doc(db, "users", user.uid);
@@ -497,8 +498,7 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    //console.log(Date(serverTimestamp))
-
+    
     getData();
   }, [])
 
@@ -554,6 +554,8 @@ export default function Profile() {
       <Hero title="Profile" desc={'E-mail: ' + user.email + ', Username: ' + user.displayName}  ></Hero>
 
       <Box component="form" noValidate onSubmit={handleSave} sx={{ bgcolor: "white", borderRadius: "16px", padding: "20px" }}>
+
+   
 
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
@@ -734,6 +736,7 @@ export default function Profile() {
         >
           Save
         </Button>
+
       </Box>
 
 

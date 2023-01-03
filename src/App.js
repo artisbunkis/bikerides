@@ -52,9 +52,9 @@ function App() {
 
           <Route path="*" element={<PageNotFound />} />
 
-          <Route path='/ShoppingItem/:title' element={<PrivateRoute> <ShoppingItem /> </PrivateRoute>} />
+          <Route path='/ShoppingItem/:id' element={<PrivateRoute> <ShoppingItem /> </PrivateRoute>} />
           <Route path='/Group/:group_id' element={<PrivateRoute> <GroupItem /> </PrivateRoute>} />
-        
+ 
 
         </Routes>
 

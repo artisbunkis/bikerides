@@ -11,25 +11,53 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { CardActionArea } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useState, useEffect, useRef } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 
 export default function ActionAreaCard(props) {
 
     const navigate = useNavigate();
-    const handleOnClick = useCallback(() => navigate(`/ShoppingItem/${props.title}`, { state: { title: props.title } }, { replace: true }), [navigate]);
+    const handleOnClick = useCallback(() => navigate(`/ShoppingItem/${props.id}`, { state: { id: props.id, title: props.title, sellerUserId: props.sellerUserId, image: props.image, desc: props.desc, category: props.category, price: props.price, sellerName: props.sellerName, sellerPhoto: props.sellerPhoto } }, { replace: true }), [navigate]);
+
+    const [loading, setLoading] = useState(true);
+
+    function handleImageLoad() {
+        setLoading(false);
+    }
+
+    const [imageIsLoading, setImageIsLoading] = useState(true);
+    const [image, setImage] = useState({});
+    const handleImageLoaded = () => {
+        setImageIsLoading(false);
+    };
+
+    useEffect(() => {
+        const image = new Image();
+        image.onload = handleImageLoaded;
+        image.src = props.image;
+        setImage(image);
+    }, []);
 
     return (
         <Box sx={{ padding: 2 }}>
             <Card sx={{ width: 345, minWidth: 345, maxWidth: 345, borderRadius: 6 }} onClick={handleOnClick} >
                 <CardActionArea>
-                    <CardMedia
+                    {imageIsLoading ? <Box sx={{ height: "200px" }} display="flex"
+                        justifyContent="center"
+                        alignItems="center">
+                        <CircularProgress color="primary" sx={{ margin: "auto" }} />
+                    </Box> : <CardMedia
                         component="img"
                         height="180"
                         image={props.image}
                         alt={props.alt}
-                    />
+                    />}
+
+
+
+
                     <CardContent>
                         <Grid container spacing={2} justifyContent="center" alignItems="center" marginLeft={0} marginBottom={1}>
                             <Grid item xs={6} padding="0">

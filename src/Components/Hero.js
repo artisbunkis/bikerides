@@ -10,9 +10,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme();
 
 export default function Hero(props) {
+
     return (
         <Box bgcolor="white" marginBottom="20px" width="auto" height="auto" borderRadius="16px"  >
-            <Grid container  bgcolor="white" width="auto" height="auto" borderRadius="16px" display="flex" justifyContent="center" alignItems="center">
+            <Grid container bgcolor="white" width="auto" height="auto" borderRadius="16px" display="flex" justifyContent="center" alignItems="center">
                 <Grid
                     item
                     height='400px'
@@ -20,7 +21,10 @@ export default function Hero(props) {
                     sm={6}
                     md={8}
                     sx={{
-                        backgroundImage: 'url(https://images.pexels.com/photos/5851030/pexels-photo-5851030.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)',//'url(https://source.unsplash.com/user/tomphotocycling)',
+                        backgroundImage:
+                            props.type == "group-item" ?
+                                props.image ? `url("${props.image}")` : 'url("/bikerides-group-thumbnail.png")'
+                                : 'url("https://source.unsplash.com/user/tomphotocycling")',
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -31,10 +35,11 @@ export default function Hero(props) {
                             height: 250,
                             borderRadius: '16px 16px 0px 0px',
 
-                          },
+                        },
 
                     }}
                 />
+               
 
                 <Grid item xs={12} md={4} sm={6} height="auto" width="auto" alignItems="center" sx={{ verticalAlign: "center" }}>
                     <Stack textAlign="start" padding="10%" spacing={2} >

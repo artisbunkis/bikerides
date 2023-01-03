@@ -12,7 +12,32 @@ import { UserAuth } from '../Config/AuthContext';
 
 
 export default function Home() {
-  
+
+  const thumbnail = {
+    borderRadius: "25px",
+    width: "100%",
+    height: "400px",
+    margin: "auto",
+    textAlign: "center",
+    position: "relative",
+  }
+
+
+  const caption = {
+    position: "absolute",
+    margin: "auto",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    color: "#464445",
+    height: "100px",
+    fontSize: "72px",
+    letterSpacing: "-5px"
+
+  }
+
+
   const db = getFirestore(app);
   const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
@@ -22,12 +47,12 @@ export default function Home() {
       const data = await getDocs(usersCollectionRef);
       //console.log(data);
 
-      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     }
-  
+
     getUsers()
   }, [])
-  
+
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
 
@@ -41,13 +66,18 @@ export default function Home() {
     }
   };
 
-  
+
   return (
-    <div> 
-      <Hero title='Home'/>
-      <Hero title='Random' desc="Apraksts"/>
-      <ActionAreaCard image="google.svg"></ActionAreaCard>
+
+
+    <div class="thumb" style={thumbnail}>
+      <div>
+        <img src="https://images.unsplash.com/photo-1601625193660-86f2807b024b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" style={{borderRadius: "25px", objectFit: "cover"}}  width="100%" height="960px"/>
+          <h1 class="text_over_image" style={caption}>Welcome.</h1>
+      </div>
     </div>
+
+
   )
 
 }

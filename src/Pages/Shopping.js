@@ -20,10 +20,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import * as React from 'react';
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import FormGroup from '@mui/material/FormGroup';
+
 
 
 // Create a group dialog function:
 function SimpleDialog(props) {
+
   const [loading, setLoading] = useState(true);
   const { onClose, selectedValue, open } = props;
 
@@ -35,113 +42,151 @@ function SimpleDialog(props) {
   const { user, updateProfile } = UserAuth();
   const [groupName, setGroupName] = useState();
 
-  const [title, setTitle] = useState([]);
-  const [desc, setDesc] = useState([]);
-  const [category, setCategory] = useState([]);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [category, setCategory] = useState("None");
   const [price, setPrice] = useState([]);
 
   const [selectedFile, setSelectedFile] = useState('');
+  const [preview, setPreview] = useState()
   const storage = getStorage();
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined)
+      return
+    } else {
+      const objectUrl = URL.createObjectURL(selectedFile);
+      setPreview(objectUrl);
+      console.log(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl)
+    }
+  }, [selectedFile])
 
 
   const handleSave = async (e) => {
+    e.preventDefault();
     setLoading(true);
 
-    if (selectedFile) {
-      const imagesRef = ref(storage, `shoppingImages/${user.uid}/${selectedFile.name}`);
-      uploadBytes(imagesRef, selectedFile).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then(urlis =>
-          addDoc(collection(db, "shopping"), {
-            title: title,
-            desc: desc,
-            category: category,
-            price: price,
-            user_id: user.uid,
-            sellerName: user.displayName,
-            sellerPhoto: user.photoURL,
-            image: urlis
-          })
-        )
-      });
-
-    }
-
     // Sets initial data in groups collection for group with id:
+    await uploadBytes(ref(storage, `shoppingImages/${user.uid}/${selectedFile.name}`), selectedFile).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then(urlis =>
+        addDoc(collection(db, "shopping"), {
+          title: title,
+          desc: desc,
+          category: category ? category : "Bike",
+          price: price,
+          user_id: user.uid,
+          sellerName: user.displayName,
+          sellerPhoto: user.photoURL,
+          image: urlis,
+          user_id: user.uid
+        }).then(response => {
+          handleClose();
+          setLoading(false);
+          window.location.reload(false);
+        })
+      )
+    })
 
-
-
-
-
-
-    setLoading(false);
-    handleClose();
   }
 
+  const formRef = React.useRef();
+
   return (
+
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Create new shopping item</DialogTitle>
       <Box sx={{ padding: "0px 30px 30px 30px" }}>
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227, paddingBottom: "15px" }}>
+              <form onSubmit={handleSave} ref={formRef}>
 
-              <TextField
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                id="outlined-required"
-                label="Title"
-                defaultValue={null}
-                sx={{ marginBottom: 2 }}
-              />
+                <FormControl fullWidth >
+                  <TextField
 
-              <TextField
-                onChange={(e) => setDesc(e.target.value)}
-                required
-                id="outlined-required"
-                label="Description"
-                defaultValue={null}
-                sx={{ marginBottom: 2 }}
-              />
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    id="outlined-required"
+                    label="Title"
+                    defaultValue={null}
+                    sx={{ marginBottom: 2 }}
+                  />
+                </FormControl>
+                <FormControl fullWidth required>
+                  <TextField
 
-              <TextField
-                onChange={(e) => setCategory(e.target.value)}
-                required
-                id="outlined-required"
-                label="Category"
-                defaultValue={null}
-                sx={{ marginBottom: 2 }}
-              />
+                    onChange={(e) => setDesc(e.target.value)}
+                    required
+                    id="outlined-required"
+                    label="Description"
+                    defaultValue={null}
+                    sx={{ marginBottom: 2 }}
+                    multiline
+                  />
+                </FormControl>
 
-              <TextField
-                onChange={(e) => setPrice(e.target.value)}
-                required
-                id="outlined-required"
-                label="Price"
-                defaultValue={null}
-                sx={{ marginBottom: 2 }}
-              />
+                <FormControl fullWidth>
+                  <InputLabel>Category</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    required
+                    id="demo-simple-select"
+                    label="Category"
+                    value={category}
+                    sx={{ marginBottom: 2 }}
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    <MenuItem value={"Road Bike"}>Road Bike</MenuItem>
+                    <MenuItem value={"MTB"}>MTB</MenuItem>
+                    <MenuItem value={"Gravel Bike"}>Gravel Bike</MenuItem>
+                    <MenuItem value={"TT Bike"}>TT Bike</MenuItem>
+                    <MenuItem value={"BMX"}>BMX</MenuItem>
+                    <MenuItem value={"Children Bike"}>Children Bike</MenuItem>
+                    <MenuItem value={"None"}>None</MenuItem>
+                  </Select>
+                </FormControl>
 
-              <input
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="raised-button-file"
-                type="file"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-              />
-              <label htmlFor="raised-button-file">
-                <img
-                  alt="Remy Sharp"
-                  src="default-thumbnail.jpg" //{user.photoURL ? user.photoURL : null}
-                  style={{ width: 227, borderRadius: 6 }}
+                <FormControl fullWidth>
+                  <TextField
+                    onChange={(e) => setPrice(e.target.value)}
+                    required
+                    id="outlined-required"
+                    label="Price"
+                    defaultValue={null}
+                    sx={{ marginBottom: 2 }}
+                  />
+                </FormControl>
 
-                />
-              </label>
+                <FormControl fullWidth>
+                  <input
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    id="raised-button-file"
+                    type="file"
+                    required
+                    onChange={(e) => setSelectedFile(e.target.files[0])}
+                  />
+                  <label htmlFor="raised-button-file">
+
+                    <img
+                      alt="Error"
+                      src={selectedFile ? preview : "/default-thumbnail.jpg"}
+                      style={{ width: 227, borderRadius: 6 }}
+
+                    />
+                  </label>
+                </FormControl>
+
+                <Button type="submit" sx={{ width: 227 }} variant="contained">List Item</Button>
+              </form>
+
             </Box>
           </Grid>
 
         </Grid>
 
-        <Button onClick={handleSave} sx={{ width: 227 }} variant="contained">List Item</Button>
       </Box>
 
 
@@ -155,10 +200,53 @@ SimpleDialog.propTypes = {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default function Shopping() {
 
-  const { user, updateProfile } = UserAuth();
-  const [groupLists, setGroupList] = useState([]);
+
+
+
+
+
+
+
+
   const [open, setOpen] = React.useState(false);
   const [searchValue, setSearchValue] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
@@ -168,6 +256,8 @@ export default function Shopping() {
     const data = onSnapshot(q, (querySnapshot) => {
       setShoppingList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     });
+    console.log("updated data!");
+    console.log(shoppingList);
   };
 
   // Handle dialog open:
@@ -182,13 +272,18 @@ export default function Shopping() {
 
   useEffect(() => {
     getSearchData();
+    console.log("updated!");
+
   }, []);
+
+
 
   return (
     <Box margin="auto" maxWidth="1920px">
+      <SimpleDialog open={open} onClose={handleClose} />
       <Hero title="Shopping" desc="This is page for shopping items." />
 
-      <SimpleDialog open={open} onClose={handleClose} />
+
 
       <Fab color="primary" onClick={handleClickOpen} aria-label="add" sx={{
         margin: 0,
@@ -235,12 +330,14 @@ export default function Shopping() {
               } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
                 return val
               }
-            }).map((listItem) => {
-              return (
-                <ActionAreaCard title={listItem.title} alt="Kirzaka" image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
+            })
+              .sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+              .map((listItem) => {
+                return (
+                  <ActionAreaCard id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
 
-              );
-            })}
+                );
+              })}
 
           </Stack>
         </Box>
