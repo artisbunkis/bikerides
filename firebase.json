@@ -3,6 +3,9 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "functions": {
+    "source": "src/index.js"
+  },
   "hosting": {
     "public": "public",
     "ignore": [
