@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect } from 'react';
-import { collection, doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, doc, getDoc, updateDoc, serverTimestamp, query, onSnapshot, where } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../Config/firebase-config";
 import Skeleton from '@mui/material/Skeleton';
@@ -21,6 +21,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
+import ActionAreaCard from '../Components/Card';
+import Chip from '@mui/material/Chip';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 
 export default function Profile() {
@@ -476,6 +485,121 @@ export default function Profile() {
   const imagesRef = ref(storage, `profileImages/${user.uid}/${selectedFile.name}`);
   const [imgUrl, setImgUrl] = useState(null);
 
+  /////////////////////////////////////////////////////////////////
+  //Checklist
+  function not(a, b) {
+    return a.filter((value) => b.indexOf(value) === -1);
+  }
+  
+  function intersection(a, b) {
+    return a.filter((value) => b.indexOf(value) !== -1);
+  }
+  const [checked, setChecked] = useState([]);
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
+
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
+
+  const handleCheckedRight = async () => {
+    leftChecked.forEach(item => {
+      const itemRef = doc(db, "shopping", item.id);
+      updateDoc(itemRef, {
+        sold: true
+      })
+    })
+    setRight(right.concat(leftChecked));
+    setLeft(not(left, leftChecked));
+    setChecked(not(checked, leftChecked));
+  };
+
+  const handleCheckedLeft = async () => {
+    rightChecked.forEach(item => {
+      const itemRef = doc(db, "shopping", item.id);
+      updateDoc(itemRef, {
+        sold: false
+      })
+    })
+    setLeft(left.concat(rightChecked));
+    setRight(not(right, rightChecked));
+    setChecked(not(checked, rightChecked));
+  };
+
+  
+
+  const [shoppingList, setShoppingList] = useState([]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    const q1 = query(collection(db, "shopping"), where("user_id", '==', user.uid), where("sold", '==', false));
+    const data1 = onSnapshot(q1, (querySnapshot) => {
+      setLeft(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+
+    const q2 = query(collection(db, "shopping"), where("user_id", '==', user.uid), where("sold", '==', true));
+    const data2 = onSnapshot(q2, (querySnapshot) => {
+      setRight(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+
+    setLoading(false);
+
+  };
+
+  const customList = (shoppingList) => (
+    <Paper sx={{ width: "550px", height: "auto", maxHeight: "1000px", overflow: 'auto', border: 0, boxShadow: "none" }}>
+      <List dense component="div" role="list">
+        {shoppingList.map((value) => {
+          const labelId = `transfer-list-item-${value}-label`;
+
+          return (
+            <ListItem
+              key={value}
+              role="listitem"
+              button
+              onClick={handleToggle(value)}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  checked={checked.indexOf(value) !== -1}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{
+                    'aria-labelledby': labelId,
+                  }}
+                />
+              </ListItemIcon>
+              <img width="200px" height="120px" style={{objectFit: "cover", borderRadius: "12px"}} src={value.image}></img>
+              <Box sx={{padding: 2}}>
+                <h3  id={labelId}>{value.title}</h3>
+                {
+                  value.sold
+                  ?<Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="sold" color="warning" />
+                  :<Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="open" color="success" />
+                  
+                }
+                <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label={value.price} color="primary" />
+              </Box>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Paper>
+  );
+  /////////////////////////////////////////////////////////////////
   
   // Get data from Firestore:
   const getData = async (e) => {
@@ -494,8 +618,11 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    
+
+
     getData();
+    getSearchData();
+
   }, [])
 
   // Upload data to firestore:
@@ -733,7 +860,48 @@ export default function Profile() {
       </Box>
 
 
+      <Box component="form" noValidate onSubmit={handleSave} sx={{ bgcolor: "white", borderRadius: "16px", padding: "20px", marginTop: "20px" }}>
+          <h1>My Items:</h1>
+          <Grid container spacing={2} marginTop="10px" justifyContent="center" alignItems="center">
+      <Grid item >{customList(left)}</Grid>
+      <Grid item>
+        <Grid container  direction="column" alignItems="center">
+          
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleCheckedRight}
+            disabled={leftChecked.length === 0}
+            aria-label="move selected right"
+          >
+            Sold &gt;
+          </Button>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleCheckedLeft}
+            disabled={rightChecked.length === 0}
+            aria-label="move selected left"
+          >
+            &lt; Open
+          </Button>
+          
+        </Grid>
+      </Grid>
+      <Grid item>{customList(right)}</Grid>
+    </Grid>
 
+    {shoppingList
+              .sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+              .map((listItem) => {
+                return (
+                  <ActionAreaCard key={listItem.id} id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
+
+                );
+              })}
+      </Box>
 
 
     </Box>

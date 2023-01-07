@@ -13,7 +13,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, setDoc, doc, updateDoc, onSnapshot, query } from "firebase/firestore";
+import { collection, addDoc, getDocs, setDoc, doc, updateDoc, onSnapshot, query, where } from "firebase/firestore";
 import { db, storage } from "../Config/firebase-config";
 import PropTypes from 'prop-types';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -81,6 +81,7 @@ function SimpleDialog(props) {
           sellerName: user.displayName,
           sellerPhoto: user.photoURL,
           image: urlis,
+          sold: false,
           user_id: user.uid
         }).then(response => {
           handleClose();
@@ -228,7 +229,7 @@ export default function Shopping() {
   const [shoppingList, setShoppingList] = useState([]);
 
   const getSearchData = async () => {
-    const q = query(collection(db, "shopping"));
+    const q = query(collection(db, "shopping"), where("sold", "==", false));
     const data = onSnapshot(q, (querySnapshot) => {
       setShoppingList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     });

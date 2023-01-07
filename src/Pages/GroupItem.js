@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect, useRef } from 'react';
-import { collection, addDoc, getDocs, getDoc, setDoc, doc, updateDoc, serverTimestamp, where, orderBy, query, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, setDoc, doc, updateDoc, deleteDoc, serverTimestamp, where, orderBy, query, onSnapshot } from "firebase/firestore";
 import { db } from "../Config/firebase-config";
 import * as React from 'react';
 import SplashScreen from "../Components/SplashScreen";
@@ -109,16 +109,18 @@ export default function GroupItem({ route, navigate }) {
         );
 
         // Iegūst dokumentu snapshot:
-        const querySnapshot = await getDocs(gr);
+        const docsData = onSnapshot(gr, (querySnapshot) => {
+                // Ja ir akceptēts, tad aizpilda mainīgo:
+            if (querySnapshot.size == 0) {
+                setIsRequested(false)
+            } else {
+                setIsRequested(true)
+                setIsAccepted(querySnapshot.docs[0].data().request_accepted);
+            }
 
-        // Ja ir akceptēts, tad aizpilda mainīgo:
-        if (querySnapshot.size == 0) {
-            setIsRequested(false)
-        } else {
-            setIsRequested(true)
-            setIsAccepted(querySnapshot.docs[0].data().request_accepted);
-        }
+        });
 
+        
         // Atgriež un sakārto visas ziņas augošā secībā pēc datuma, lai parādītu sarakstē:
         const msgs = query(
             collection(db, `groups/${location.state.group_id}/messages`),
@@ -184,8 +186,50 @@ export default function GroupItem({ route, navigate }) {
         }
     };
 
+    // Izveidot jaunu grupas pieprasījumu:
+    const handleRemoveUser = async (e, userID) => {
+
+        e.preventDefault();
+        setError('')
+
+        try {
+            setLoading(true);
+            const groupUserRef = doc(db, `groups/${groupData.group_id}/groupUsers`, userID);
+            const requestsQuery = query(
+                collection(db, "groupRequests"),
+                where("group_id", "==", groupData.group_id),
+                where("user_id", "==", userID)
+            );
+
+            deleteDoc(groupUserRef);
+            const querySnapshot = await getDocs(requestsQuery);
+            querySnapshot.forEach((docu) => {
+                deleteDoc(doc(db, `groupRequests/${docu.id}`))
+            });
+
+            await getData();
+            setLoading(false);
+        } catch (e) {
+            setError(e.message)
+            setLoading(false)
+        }
+    };
+
     // Accept the request as admin:
     const handleRequestAccept = async (e, isAccepted, user_id) => {
+
+        if(isAccepted == 0) {
+            const requestsQuery = query(
+                collection(db, "groupRequests"),
+                where("group_id", "==", groupData.group_id),
+                where("user_id", "==", user_id)
+            );
+            const querySnapshot = await getDocs(requestsQuery);
+            querySnapshot.forEach((docu) => {
+                deleteDoc(doc(db, `groupRequests/${docu.id}`))
+            });
+            return;
+        }
 
         const q = query(
             collection(db, "groupRequests"),
@@ -257,7 +301,7 @@ export default function GroupItem({ route, navigate }) {
                                 <h1 style={{ marginBottom: 15 }}>Requests</h1>
                                 {groupRequestLists.map((request) => {
                                     return (
-                                        <Box key={request.user_id} padding="10px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5 }}>
+                                        <Box key={request.user_id} padding="10px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5, maxHeight: "250px", overflow: "scroll" }}>
 
                                             <Grid key={request.user_id} container>
                                                 <Grid item key={request.user_id} xs sx={{ margin: "auto", paddingLeft: 1.5 }}>
@@ -316,7 +360,7 @@ export default function GroupItem({ route, navigate }) {
 
                         <Box sx={{ width: "auto", borderRadius: 6, backgroundColor: 'white', textAlign: 'left', padding: 3 }} >
                             <h1 style={{ marginBottom: 15 }}>Group Users</h1>
-                            <Box padding="10px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5 }}>
+                            <Box padding="10px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5, maxHeight: "550px", overflow: "scroll"  }}>
                                 {groupUsersList.map((groupUser) => {
                                     return (
                                         <Box padding="10px" key={groupUser.user_id}>
@@ -325,7 +369,8 @@ export default function GroupItem({ route, navigate }) {
                                                 ? <Box key={groupUser.user_id} sx={{ display: "flex", gap: "5px", verticalAlign: "bottom" }}><h3 key={groupUser.user_id} style={{ color: "#2e82d6", marginRight: 2 }}>You</h3><h5 sx={{ margin: 2 }}>*Admin*</h5></Box>
                                                 : groupUser.user_id == groupData.group_admin
                                                     ? <Box key={groupUser.user_id} sx={{ display: "flex", gap: "5px" }}><h3 key={groupUser.user_id} style={{ color: "#2e82d6", marginRight: 2 }}>{groupUser.username}</h3><h5>*Admin*</h5></Box>
-                                                    : <h3 key={groupUser.user_id}>{groupUser.username} </h3>}
+                                                    : user.uid == groupData.group_admin ? <Grid container><Grid item sx={{marginTop: "auto", marginBottom: "auto"}}><h3 key={groupUser.user_id}>{groupUser.username} </h3></Grid>
+                                                    <Grid item><Button color="warning" key={groupUser.user_id} onClick={(e) => handleRemoveUser(e, groupUser.user_id)}>Remove</Button></Grid></Grid> : <h3 key={groupUser.user_id}>{groupUser.username} </h3>}
 
 
 
@@ -374,7 +419,7 @@ export default function GroupItem({ route, navigate }) {
                                             onKeyPress={(ev) => {
                                                 if (ev.key === 'Enter') {
                                                     // Do code here
-                                                    sendMessage(messageText);
+                                                    if(messageText != '') sendMessage(messageText);
                                                     setMessageText('');
                                                 }
                                             }}

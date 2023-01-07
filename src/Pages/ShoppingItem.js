@@ -128,7 +128,7 @@ export default function ShoppingItem({ route, navigate }) {
     getData();
     getSearchData();
 
-  }, [])
+  }, [params])
 
 
   return (
@@ -279,6 +279,9 @@ export default function ShoppingItem({ route, navigate }) {
                 >
               
                   {shoppingList.sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+                    .filter((val) => {
+                      if(val.category == shoppingData.category) return val
+                    })
                     .sort(() => Math.random() - 0.5)
                     .slice(0, 5)
                     .filter((val) => {

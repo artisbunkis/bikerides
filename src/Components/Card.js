@@ -18,6 +18,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 export default function ActionAreaCard(props) {
 
     // Mainīgo deklarēšana:
+    
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [imageIsLoading, setImageIsLoading] = useState(true);
@@ -41,6 +42,7 @@ export default function ActionAreaCard(props) {
         image.onload = handleImageLoaded;
         image.src = props.image;
         setImage(image);
+      
     }, []);
 
     return (
