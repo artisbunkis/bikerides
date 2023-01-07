@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Hero from "../Components/Hero"
+import usePagination from "../Components/Pagination"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import Divider from '@mui/material/Divider';
@@ -28,6 +29,7 @@ import FormGroup from '@mui/material/FormGroup';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import Pagination from '@mui/material/Pagination';
 
 
 // Create a group dialog function:
@@ -39,6 +41,7 @@ function SimpleDialog(props) {
   const handleClose = () => {
     onClose(selectedValue);
   };
+
 
 
   const { user, updateProfile } = UserAuth();
@@ -164,9 +167,9 @@ function SimpleDialog(props) {
                   />
                 </FormControl>
 
-                <Grid container sx={{verticalAlign: "center"}}>
-                  <Grid item sx={{verticalAlign: "center", marginTop: "auto", marginBottom: "auto", paddingRight: "10px"}}>
-                    <InputLabel sx={{verticalAlign: "center"}} htmlFor="outlined-adornment-amount">Select Image *</InputLabel>
+                <Grid container sx={{ verticalAlign: "center" }}>
+                  <Grid item sx={{ verticalAlign: "center", marginTop: "auto", marginBottom: "auto", paddingRight: "10px" }}>
+                    <InputLabel sx={{ verticalAlign: "center" }} htmlFor="outlined-adornment-amount">Select Image *</InputLabel>
                   </Grid>
                   <Grid item>
                     <FormControl fullWidth>
@@ -186,16 +189,16 @@ function SimpleDialog(props) {
                         </IconButton>
 
                       </label>
-                      
+
                     </FormControl>
                   </Grid>
                 </Grid>
                 <img
-                        alt="Error"
-                        src={selectedFile ? preview : "/default-thumbnail.jpg"}
-                        style={{ width: 227, borderRadius: 6 }}
+                  alt="Error"
+                  src={selectedFile ? preview : "/default-thumbnail.jpg"}
+                  style={{ width: 227, borderRadius: 6 }}
 
-                      />
+                />
 
 
 
@@ -222,17 +225,29 @@ SimpleDialog.propTypes = {
 
 export default function Shopping() {
 
-
+  // Pagination variables:
+  let [page, setPage] = useState(1);
+  const PER_PAGE = 6;
+  const [count, setCount] = useState([]);
 
   const [open, setOpen] = React.useState(false);
   const [searchValue, setSearchValue] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
+  //const [_DATA, _setDATA] = useState([]);
+  const _DATA = usePagination(shoppingList, PER_PAGE);
+
+  const dataTemp = usePagination(shoppingList, PER_PAGE)
 
   const getSearchData = async () => {
     const q = query(collection(db, "shopping"), where("sold", "==", false));
     const data = onSnapshot(q, (querySnapshot) => {
+      setCount(Math.ceil(querySnapshot.docs.length / PER_PAGE));
       setShoppingList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+
     });
+
+
   };
 
   // Handle dialog open:
@@ -245,9 +260,14 @@ export default function Shopping() {
     setOpen(false);
   };
 
+  // Pagination change page:
+  const handleChange = (e, p) => {
+    setPage(p);
+    _DATA.jump(p);
+  };
+
   useEffect(() => {
     getSearchData();
-
   }, []);
 
 
@@ -275,6 +295,7 @@ export default function Shopping() {
 
 
 
+
         <Box sx={{ height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: 1.5 }} >
           <Box sx={{ minWidth: 380, margin: 'auto' }} >
             <Box id="Text-Input-Box" sx={{ backgroundColor: '#f3f5f8', height: 60, borderRadius: 6, margin: "auto", paddingLeft: 3, paddingRight: 3, paddingTop: "15px", width: "auto" }}>
@@ -298,24 +319,53 @@ export default function Shopping() {
             spacing={{ xs: 1, sm: 2, md: 0 }}
             sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
           >
-            {shoppingList.filter((val) => {
-              if (searchValue == "") {
-                return val
-              } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
-                return val
-              }
-            })
-              .sort((a, b) => a.itemM > b.itemM ? 1 : -1)
-              .map((listItem) => {
-                return (
-                  <ActionAreaCard key={listItem.id} id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
+            {searchValue == ""
+              ? _DATA.currentData()
+                .filter((val) => {
+                  if (searchValue == "") {
+                    return val
+                  } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
+                    return val
+                  }
+                })
+                .sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+                .map(listItem => {
+                  return (
+                    <ActionAreaCard key={listItem.id} id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
 
-                );
-              })}
+                  );
+                })
+              : shoppingList
+                .filter((val) => {
+                  if (searchValue == "") {
+                    return val
+                  } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
+                    return val
+                  }
+                })
+                .sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+                .map(listItem => {
+                  return (
+                    <ActionAreaCard key={listItem.id} id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
+
+                  );
+                })
+            }
+
+
+
+
 
           </Stack>
         </Box>
-
+        {searchValue == "" ? <Pagination
+          count={count}
+          size="large"
+          page={page}
+          variant="outlined"
+          shape="rounded"
+          onChange={handleChange}
+        /> : null}
 
         <Grid
           sx={{

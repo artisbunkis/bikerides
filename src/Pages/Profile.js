@@ -5,8 +5,8 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect } from 'react';
-import { collection, doc, getDoc, updateDoc, serverTimestamp, query, onSnapshot, where } from "firebase/firestore";
-import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { collection, doc, getDoc, updateDoc, serverTimestamp, query, onSnapshot, where, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL, uploadBytesResumable, list } from "firebase/storage";
 import { db, storage } from "../Config/firebase-config";
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
@@ -30,9 +30,21 @@ import Paper from '@mui/material/Paper';
 import ActionAreaCard from '../Components/Card';
 import Chip from '@mui/material/Chip';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import IconButton from '@mui/material/IconButton';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Typography from '@mui/material/Typography';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export default function Profile() {
+
+
+
+
+
   const countries = [
     { code: 'AD', label: 'Andorra', phone: '376' },
     {
@@ -479,18 +491,28 @@ export default function Profile() {
   const [country, setCountry] = useState();
   const [city, setCity] = useState();
   const [birthDate, setBirthDate] = useState();
+  const [groupLists, setGroupList] = useState([]);
 
   const [selectedFile, setSelectedFile] = useState('');
   const storage = getStorage();
   const imagesRef = ref(storage, `profileImages/${user.uid}/${selectedFile.name}`);
   const [imgUrl, setImgUrl] = useState(null);
 
+  // Groups
+  // Get all groups list:
+  const getGroups = async () => {
+    const q = query(collection(db, "groups"), where("group_admin", '==', user.uid));
+    const data = onSnapshot(q, (querySnapshot) => {
+      setGroupList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+  }
+
   /////////////////////////////////////////////////////////////////
   //Checklist
   function not(a, b) {
     return a.filter((value) => b.indexOf(value) === -1);
   }
-  
+
   function intersection(a, b) {
     return a.filter((value) => b.indexOf(value) !== -1);
   }
@@ -539,7 +561,7 @@ export default function Profile() {
     setChecked(not(checked, rightChecked));
   };
 
-  
+
 
   const [shoppingList, setShoppingList] = useState([]);
 
@@ -582,14 +604,14 @@ export default function Profile() {
                   }}
                 />
               </ListItemIcon>
-              <img width="200px" height="120px" style={{objectFit: "cover", borderRadius: "12px"}} src={value.image}></img>
-              <Box sx={{padding: 2}}>
-                <h3  id={labelId}>{value.title}</h3>
+              <img width="200px" height="120px" style={{ objectFit: "cover", borderRadius: "12px" }} src={value.image}></img>
+              <Box sx={{ padding: 2 }}>
+                <h3 id={labelId}>{value.title}</h3>
                 {
                   value.sold
-                  ?<Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="sold" color="warning" />
-                  :<Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="open" color="success" />
-                  
+                    ? <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="sold" color="warning" />
+                    : <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="open" color="success" />
+
                 }
                 <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label={value.price} color="primary" />
               </Box>
@@ -600,7 +622,7 @@ export default function Profile() {
     </Paper>
   );
   /////////////////////////////////////////////////////////////////
-  
+
   // Get data from Firestore:
   const getData = async (e) => {
     const userProfileRef = doc(db, "users", user.uid);
@@ -622,7 +644,7 @@ export default function Profile() {
 
     getData();
     getSearchData();
-
+    getGroups();
   }, [])
 
   // Upload data to firestore:
@@ -668,6 +690,24 @@ export default function Profile() {
     }
   };
 
+  // Upload data to firestore:
+  const deleteGroup = async (e, groupID) => {
+
+    // Neļauj restartēt lapu:
+    e.preventDefault();
+    // Sākumā kļūdas nav:
+    setError('')
+
+    // Aktivizē lādēšanās skatu:
+    setLoading(true);
+    // Atjauno lietotāja dokumentu users kolekcijā:
+    await deleteDoc(doc(db, 'groups', groupID));
+
+    // Atgriež jaunos datus:
+    await getData();
+    // Deaktivizē lādēšanās skatu:
+    setLoading(false);
+  };
 
 
   return (
@@ -676,7 +716,7 @@ export default function Profile() {
 
       <Box component="form" noValidate onSubmit={handleSave} sx={{ bgcolor: "white", borderRadius: "16px", padding: "20px" }}>
 
-   
+
 
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
@@ -861,47 +901,75 @@ export default function Profile() {
 
 
       <Box component="form" noValidate onSubmit={handleSave} sx={{ bgcolor: "white", borderRadius: "16px", padding: "20px", marginTop: "20px" }}>
-          <h1>My Items:</h1>
-          <Grid container spacing={2} marginTop="10px" justifyContent="center" alignItems="center">
-      <Grid item >{customList(left)}</Grid>
-      <Grid item>
-        <Grid container  direction="column" alignItems="center">
-          
-          <Button
-            sx={{ my: 0.5 }}
-            variant="outlined"
-            size="small"
-            onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
-          >
-            Sold &gt;
-          </Button>
-          <Button
-            sx={{ my: 0.5 }}
-            variant="outlined"
-            size="small"
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            &lt; Open
-          </Button>
-          
-        </Grid>
-      </Grid>
-      <Grid item>{customList(right)}</Grid>
-    </Grid>
+        <h1>My Items:</h1>
+        <Grid container spacing={2} marginTop="10px" justifyContent="center" alignItems="center">
+          <Grid item >{customList(left)}</Grid>
+          <Grid item>
+            <Grid container direction="column" alignItems="center">
 
-    {shoppingList
-              .sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+              <Button
+                sx={{ my: 0.5 }}
+                variant="outlined"
+                size="small"
+                onClick={handleCheckedRight}
+                disabled={leftChecked.length === 0}
+                aria-label="move selected right"
+              >
+                Sold &gt;
+              </Button>
+              <Button
+                sx={{ my: 0.5 }}
+                variant="outlined"
+                size="small"
+                onClick={handleCheckedLeft}
+                disabled={rightChecked.length === 0}
+                aria-label="move selected left"
+              >
+                &lt; Open
+              </Button>
+
+            </Grid>
+          </Grid>
+          <Grid item>{customList(right)}</Grid>
+        </Grid>
+
+
+      </Box>
+
+      <Box component="form" noValidate onSubmit={handleSave} sx={{ justifyContent: "middle", bgcolor: "white", borderRadius: "16px", padding: "20px", marginTop: "20px" }}>
+        <h1>My Groups:</h1>
+        <Box sx={{ width: "auto", maxWidth: "400px", margin: "auto", marginTop: "10px" }}>
+          <List dense={true}>
+
+            {groupLists
               .map((listItem) => {
                 return (
-                  <ActionAreaCard key={listItem.id} id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
+                  <ListItem
+                    secondaryAction={
+                      <IconButton edge="end" aria-label="delete" onClick={(e) => deleteGroup(e, listItem.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    }
+                  >
+                    <ListItemAvatar>
+                      <Avatar src={listItem.group_admin_photoUrl}>
+                        {listItem.group_admin_photoUrl}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={listItem.group_name}
+                      secondary={listItem.group_category}
+                    />
+                  </ListItem>
 
                 );
               })}
+
+
+          </List>
+        </Box>
       </Box>
+
 
 
     </Box>
