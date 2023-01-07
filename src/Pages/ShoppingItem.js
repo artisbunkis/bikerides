@@ -117,7 +117,7 @@ export default function ShoppingItem({ route, navigate }) {
   const [shoppingList, setShoppingList] = useState([]);
 
   const getSearchData = async () => {
-    const q = query(collection(db, "shopping"));
+    const q = query(collection(db, "shopping"), where("sold", "==", false));
     const data = onSnapshot(q, (querySnapshot) => {
       setShoppingList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     });
@@ -164,7 +164,7 @@ export default function ShoppingItem({ route, navigate }) {
               width={"100%"} height={"100%"} style={{ objectFit: "cover", borderRadius: "20px 20px 20px 20px" }}></img>
 
 
-            <IconButton style={{ position: 'absolute', top: 40, right: 40 }} onClick={handleOpenImage}>
+            <IconButton style={{  background: 'rgba(0,0,0,0.1)', position: 'absolute', top: 40, right: 40 }} onClick={handleOpenImage}>
               <ZoomInIcon style={{ color: "white", maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px' }} />
             </IconButton>
 

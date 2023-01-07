@@ -42,6 +42,7 @@ export default function GroupCard(props) {
 
     // Get data from Firestore:
     const getData = async (e) => {
+        setLoading(true)
 
         // Get & Set Group data:
         const q = query(collection(db, "groups"), where("group_id", "==", props.group_id));
@@ -79,7 +80,6 @@ export default function GroupCard(props) {
                         component="img"
                         height="180"
                         image={groupData.image ? groupData.image : "/bikerides-group-thumbnail.png"}
-                        alt="Group Photo"
                     />}
                  
                     <CardContent>

@@ -20,6 +20,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 
@@ -46,7 +48,7 @@ function SimpleDialog(props) {
       group_description: groupDescription,
       group_category: groupCategory
     }).then(function (docRef) {
-      
+
       // Kad grupas dokuments ir izveidots, tiek ierakstīts arī ģenerētais grupas ID: 
       const groupRef = doc(db, "groups", docRef.id);
       updateDoc(groupRef, {
@@ -76,62 +78,62 @@ function SimpleDialog(props) {
 
   return (
     loading ? <SplashScreen /> :
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Create new group</DialogTitle>
-      <Box sx={{ padding: "0px 30px 30px 30px" }}>
-        <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
-          <Grid item>
-            <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227, paddingBottom: "15px" }}>
-              <form ref={formRef} onSubmit={handleCreateGroup}>
-              <TextField
-                onChange={(e) => setGroupName(e.target.value)}
-                required
-                id="outlined-required"
-                label="Group Name"
-                defaultValue={null}
-                sx={{ marginBottom: 2 }}
-                error={groupName == '' ? true : false}
-                helperText={groupName == '' && groupName}
-              />
-              <TextField
-                onChange={(e) => setGroupDescription(e.target.value)}
-                required
-                id="outlined-required"
-                label="Group Description"
-                defaultValue={null}
-                multiline
-                sx={{ marginBottom: 2 }}
-              />
-              <FormControl fullWidth>
-                <InputLabel>Category</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={groupCategory}
-                  label="Category"
-                  sx={{ marginBottom: 2 }}
-                  onChange={(e) => setGroupCategory(e.target.value)}
-                >
-                  <MenuItem value={"Road Cycling"}>Road Cycling</MenuItem>
-                  <MenuItem value={"MTB"}>MTB</MenuItem>
-                  <MenuItem value={"Gravel"}>Gravel</MenuItem>
-                  <MenuItem value={"All Around"}>All Around</MenuItem>
-                  <MenuItem value={"None"}>None</MenuItem>
-                </Select>
-              </FormControl>
-              
-              <Button type="submit" sx={{ width: 227 }} variant="contained">Create Group</Button>
-              </form>
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle>Create new group</DialogTitle>
+        <Box sx={{ padding: "0px 30px 30px 30px" }}>
+          <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
+            <Grid item>
+              <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227, paddingBottom: "15px" }}>
+                <form ref={formRef} onSubmit={handleCreateGroup}>
+                  <TextField
+                    onChange={(e) => setGroupName(e.target.value)}
+                    required
+                    id="outlined-required"
+                    label="Group Name"
+                    defaultValue={null}
+                    sx={{ marginBottom: 2 }}
+                    error={groupName == '' ? true : false}
+                    helperText={groupName == '' && groupName}
+                  />
+                  <TextField
+                    onChange={(e) => setGroupDescription(e.target.value)}
+                    required
+                    id="outlined-required"
+                    label="Group Description"
+                    defaultValue={null}
+                    multiline
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <FormControl fullWidth>
+                    <InputLabel>Category</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={groupCategory}
+                      label="Category"
+                      sx={{ marginBottom: 2 }}
+                      onChange={(e) => setGroupCategory(e.target.value)}
+                    >
+                      <MenuItem value={"Road Cycling"}>Road Cycling</MenuItem>
+                      <MenuItem value={"MTB"}>MTB</MenuItem>
+                      <MenuItem value={"Gravel"}>Gravel</MenuItem>
+                      <MenuItem value={"All Around"}>All Around</MenuItem>
+                      <MenuItem value={"None"}>None</MenuItem>
+                    </Select>
+                  </FormControl>
 
-            </Box>
+                  <Button type="submit" sx={{ width: 227 }} variant="contained">Create Group</Button>
+                </form>
+
+              </Box>
+            </Grid>
+
           </Grid>
 
-        </Grid>
-
-      </Box>
+        </Box>
 
 
-    </Dialog>
+      </Dialog>
   );
 }
 SimpleDialog.propTypes = {
@@ -147,6 +149,7 @@ export default function Groups() {
   const { user, updateProfile } = UserAuth();
   const [groupLists, setGroupList] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState(true);
 
 
   // Handle dialog open:
@@ -161,14 +164,17 @@ export default function Groups() {
 
   // Get all groups list:
   const getGroups = async () => {
+    setLoading(true);
     const q = query(collection(db, "groups"));
     const data = onSnapshot(q, (querySnapshot) => {
       setGroupList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     });
+
   }
 
   useEffect(() => {
     getGroups();
+    setLoading(false);
   }, []);
 
 
@@ -179,7 +185,7 @@ export default function Groups() {
 
       <SimpleDialog open={open} onClose={handleClose} />
 
-      
+
 
       <Fab color="primary" onClick={handleClickOpen} aria-label="add" sx={{
         margin: 0,
@@ -192,27 +198,31 @@ export default function Groups() {
         <AddIcon />
       </Fab>
 
-      <Box style={{ borderRadius: 16, padding: 20, minHeight: "400px" }}>
+      <Box style={{ borderRadius: 16, padding: 20, minHeight: "400px", backgroundColor: "white" }}>
+        {loading ?
+          <CircularProgress color="primary" sx={{ margin: "auto" }} /> :
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={{ xs: 1, sm: 2, md: 0 }}
             sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
           >
             {groupLists.map((group) => {
-    
-          return (
-            <Box key={group.group_id} padding="0px">
-              <GroupCard key={group.group_id} title={group.group_name} group_id={group.group_id} group_admin_photoURL={group.group_admin_photoUrl} group_admin_username={group.group_admin_username}></GroupCard>
-            </Box>
 
-          );
-        })}
+              return (
+                <Box key={group.group_id} padding="0px">
+                  <GroupCard key={group.group_id} title={group.group_name} group_id={group.group_id} group_admin_photoURL={group.group_admin_photoUrl} group_admin_username={group.group_admin_username}></GroupCard>
+                </Box>
+
+              );
+            })}
 
           </Stack>
-        </Box>
+        }
+      </Box>
 
 
-      
+
+
 
     </Box>
 

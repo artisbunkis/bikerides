@@ -481,6 +481,7 @@ export default function Profile() {
   const { user, updateProfile } = UserAuth();
   const userProfileRef = doc(db, "users", user.uid);
   const [loading, setLoading] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   // Editable variables:
   const [error, setError] = useState('');
@@ -582,7 +583,7 @@ export default function Profile() {
   };
 
   const customList = (shoppingList) => (
-    <Paper sx={{ width: "550px", height: "auto", maxHeight: "1000px", overflow: 'auto', border: 0, boxShadow: "none" }}>
+    <Paper sx={{ width: "550px", height: "auto", maxHeight: "800px", overflow: 'auto', border: 0, boxShadow: "none" }}>
       <List dense component="div" role="list">
         {shoppingList.map((value) => {
           const labelId = `transfer-list-item-${value}-label`;
@@ -625,18 +626,20 @@ export default function Profile() {
 
   // Get data from Firestore:
   const getData = async (e) => {
+
     const userProfileRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(userProfileRef);
 
     if (docSnap.exists()) {
       setUserProfile(docSnap.data())
-
-      setLoading(false);
+      console.log(userProfile.firstName)
+      setLoadingProfile(false);
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!")
     }
     setGender(userProfile.gender)
+   
   }
 
   useEffect(() => {
@@ -645,6 +648,7 @@ export default function Profile() {
     getData();
     getSearchData();
     getGroups();
+
   }, [])
 
   // Upload data to firestore:
@@ -741,7 +745,7 @@ export default function Profile() {
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <TextField
                   onChange={(e) => setFirstName(e.target.value)}
                   required
@@ -754,7 +758,7 @@ export default function Profile() {
           </Grid>
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <TextField
                   onChange={(e) => setLastName(e.target.value)}
                   required
@@ -770,7 +774,7 @@ export default function Profile() {
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <TextField
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   required
@@ -785,7 +789,7 @@ export default function Profile() {
           </Grid>
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <FormControl>
                   <InputLabel id="demo-simple-select-disabled-label">Gender</InputLabel>
                   <Select
@@ -810,7 +814,7 @@ export default function Profile() {
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <FormControl>
                   <InputLabel id="demo-simple-select-disabled-label">Country</InputLabel>
 
@@ -853,7 +857,7 @@ export default function Profile() {
           </Grid>
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <TextField
                   onChange={(e) => setCity(e.target.value)}
                   required
@@ -869,7 +873,7 @@ export default function Profile() {
         <Grid container sx={{ width: "90%", justifyContent: "center", margin: "auto" }} rowSpacing={2} columnSpacing={{ xs: 0, sm: 2, md: 2 }} >
           <Grid item>
             <Box className="text-field-skeleton" sx={{ textAlign: 'start', bgcolor: '', width: 227 }}>
-              {loading ? <Skeleton variant="rounded" width={227} height={56} /> :
+              {loadingProfile ? <Skeleton variant="rounded" width={227} height={56} /> :
                 <FormControl>
 
                   <LocalizationProvider dateAdapter={AdapterDayjs}>

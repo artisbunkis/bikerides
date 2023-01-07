@@ -1,0 +1,126 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2023-01-07 19:11:14
+count workspace : c:\Users\artis\bikerides
+total files : 98
+total code lines : 3875
+total comment lines : 432
+total blank lines : 732
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |          .json|            174|              0|              5|    4.5|
+   |         .rules|              9|              0|              0|   0.23|
+   |            .md|              3|              0|              1|  0.077|
+   |               |              9|              0|              0|   0.23|
+   |           .svg|              4|              0|              0|   0.10|
+   |            .js|           3039|            108|            621|     78|
+   |          .html|             79|             23|              2|    2.0|
+   |           .map|              2|              0|              0|  0.052|
+   |           .css|            459|              2|             78|     12|
+   |           .yml|             35|              2|              2|   0.90|
+   |         .cache|             62|              0|              0|    1.6|
+   |           .txt|              0|            297|             23|    0.0|
+   -------------------------------------------------------------------------
+.firebase\hosting.cHVibGlj.cache, code is 12, comment is 0, blank is 0.
+.firebase\hosting.YnVpbGQ.cache, code is 50, comment is 0, blank is 0.
+.firebaserc, code is 5, comment is 0, blank is 0.
+.github\workflows\firebase-hosting-merge.yml, code is 19, comment is 1, blank is 1.
+.github\workflows\firebase-hosting-pull-request.yml, code is 16, comment is 1, blank is 1.
+build\404.html, code is 29, comment is 0, blank is 1.
+build\asset-manifest.json, code is 44, comment is 0, blank is 1.
+build\bikerides-group-thumbnail.png, it is a binary file.
+build\bikerides-logo.png, it is a binary file.
+build\bikerides-logo.svg, code is 1, comment is 0, blank is 0.
+build\default-thumbnail.jpg, it is a binary file.
+build\favicon.ico, it is a binary file.
+build\google.svg, code is 1, comment is 0, blank is 0.
+build\index.html, code is 1, comment is 0, blank is 0.
+build\logo192.png, it is a binary file.
+build\logo512.png, it is a binary file.
+build\manifest.json, code is 25, comment is 0, blank is 0.
+build\static\css\main.d5919591.css, code is 1, comment is 2, blank is 0.
+build\static\css\main.d5919591.css.map, code is 1, comment is 0, blank is 0.
+build\static\js\main.cf5c6af4.js, code is 1, comment is 3, blank is 0.
+build\static\js\main.cf5c6af4.js.LICENSE.txt, code is 0, comment is 297, blank is 23.
+build\static\js\main.cf5c6af4.js.map, code is 1, comment is 0, blank is 0.
+build\static\media\roboto-all-300-normal.168d6383e73339293ac3.woff, it is a binary file.
+build\static\media\roboto-all-400-normal.c5d001fa922fa66a147f.woff, it is a binary file.
+build\static\media\roboto-all-500-normal.0ab669b7a0d19b178f57.woff, it is a binary file.
+build\static\media\roboto-all-700-normal.a457fde362a540fcadff.woff, it is a binary file.
+build\static\media\roboto-cyrillic-300-normal.1431d1cef06ad04f5458.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-400-normal.71a33b6b50457b2c903a.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-500-normal.cad7d3d9cb265e334e58.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-700-normal.d010f1f324e111a22e53.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-ext-300-normal.4777461b144e55145268.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-ext-400-normal.804378952da8a10faae2.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-ext-500-normal.62ced72e5832f02c2796.woff2, it is a binary file.
+build\static\media\roboto-cyrillic-ext-700-normal.be4d02458ce53887dc37.woff2, it is a binary file.
+build\static\media\roboto-greek-300-normal.db2632771401f61463fe.woff2, it is a binary file.
+build\static\media\roboto-greek-400-normal.c35e4c3958e209d17b31.woff2, it is a binary file.
+build\static\media\roboto-greek-500-normal.9ac81fefbe6c319ea40b.woff2, it is a binary file.
+build\static\media\roboto-greek-700-normal.50e795c1345353b0e996.woff2, it is a binary file.
+build\static\media\roboto-greek-ext-300-normal.35b9d6be04b95f0f0530.woff2, it is a binary file.
+build\static\media\roboto-greek-ext-400-normal.169619821ea93019d1bb.woff2, it is a binary file.
+build\static\media\roboto-greek-ext-500-normal.6fb9cffb1d3e72bf9293.woff2, it is a binary file.
+build\static\media\roboto-greek-ext-700-normal.bd9854c751441ccc1a70.woff2, it is a binary file.
+build\static\media\roboto-latin-300-normal.c48fb6765a9fcb00b330.woff2, it is a binary file.
+build\static\media\roboto-latin-400-normal.b009a76ad6afe4ebd301.woff2, it is a binary file.
+build\static\media\roboto-latin-500-normal.f25d774ecfe0996f8eb5.woff2, it is a binary file.
+build\static\media\roboto-latin-700-normal.227c93190fe7f82de3f8.woff2, it is a binary file.
+build\static\media\roboto-latin-ext-300-normal.dc7dcec8e3f654e0ed63.woff2, it is a binary file.
+build\static\media\roboto-latin-ext-400-normal.861b791f9de857a6e7bc.woff2, it is a binary file.
+build\static\media\roboto-latin-ext-500-normal.9165081d10e1ba601384.woff2, it is a binary file.
+build\static\media\roboto-latin-ext-700-normal.ed67ad54b1a8f5d21150.woff2, it is a binary file.
+build\static\media\roboto-vietnamese-300-normal.32fc45a3d1e8ea11fabc.woff2, it is a binary file.
+build\static\media\roboto-vietnamese-400-normal.3230f9b040f3c630e0c3.woff2, it is a binary file.
+build\static\media\roboto-vietnamese-500-normal.d8642a3d1d4ef6179644.woff2, it is a binary file.
+build\static\media\roboto-vietnamese-700-normal.3425a701027d0699e369.woff2, it is a binary file.
+build\trek-madone.jpg, it is a binary file.
+firebase.json, code is 19, comment is 0, blank is 1.
+firestore.indexes.json, code is 4, comment is 0, blank is 0.
+firestore.rules, code is 9, comment is 0, blank is 0.
+package.json, code is 57, comment is 0, blank is 3.
+public\404.html, code is 29, comment is 0, blank is 1.
+public\bikerides-group-thumbnail.png, it is a binary file.
+public\bikerides-logo.png, it is a binary file.
+public\bikerides-logo.svg, code is 1, comment is 0, blank is 0.
+public\default-thumbnail.jpg, it is a binary file.
+public\favicon.ico, it is a binary file.
+public\google.svg, code is 1, comment is 0, blank is 0.
+public\index.html, code is 20, comment is 23, blank is 0.
+public\logo192.png, it is a binary file.
+public\logo512.png, it is a binary file.
+public\manifest.json, code is 25, comment is 0, blank is 0.
+public\trek-madone.jpg, it is a binary file.
+README.md, code is 3, comment is 0, blank is 1.
+src\App.js, code is 44, comment is 0, blank is 26.
+src\Assets\Styles\main.css, code is 209, comment is 0, blank is 37.
+src\Assets\Styles\styles.css, code is 249, comment is 0, blank is 41.
+src\Components\Card.js, code is 91, comment is 4, blank is 20.
+src\Components\GroupCard.js, code is 97, comment is 2, blank is 29.
+src\Components\Hero.js, code is 49, comment is 0, blank is 8.
+src\Components\Navbar.js, code is 224, comment is 7, blank is 45.
+src\Components\Pagination.js, code is 22, comment is 0, blank is 7.
+src\Components\SplashScreen.js, code is 28, comment is 0, blank is 3.
+src\Config\AuthContext.js, code is 45, comment is 0, blank is 20.
+src\Config\AuthenticatedRoute.js, code is 11, comment is 0, blank is 6.
+src\Config\firebase-config.js, code is 21, comment is 6, blank is 22.
+src\Config\PrivateRoute.js, code is 12, comment is 3, blank is 8.
+src\index.js, code is 14, comment is 0, blank is 4.
+src\Pages\About.js, code is 104, comment is 0, blank is 19.
+src\Pages\Auth.js, code is 25, comment is 3, blank is 6.
+src\Pages\GroupItem.js, code is 333, comment is 19, blank is 80.
+src\Pages\Groups.js, code is 166, comment is 10, blank is 44.
+src\Pages\Home.js, code is 30, comment is 0, blank is 10.
+src\Pages\PageNotFound.js, code is 6, comment is 0, blank is 1.
+src\Pages\Profile.js, code is 872, comment is 27, blank is 83.
+src\Pages\Shopping.js, code is 299, comment is 7, blank is 79.
+src\Pages\ShoppingItem.js, code is 235, comment is 4, blank is 63.
+src\Pages\SignIn.js, code is 161, comment is 11, blank is 24.
+src\Pages\SignUp.js, code is 149, comment is 2, blank is 14.
+y, code is 4, comment is 0, blank is 0.
+===============================================================================
