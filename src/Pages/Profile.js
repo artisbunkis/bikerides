@@ -37,6 +37,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 export default function Profile() {
@@ -610,8 +612,8 @@ export default function Profile() {
                 <h3 id={labelId}>{value.title}</h3>
                 {
                   value.sold
-                    ? <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="sold" color="warning" />
-                    : <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label="open" color="success" />
+                    ? <Chip sx={{ margin: "3px" }} icon={<CancelIcon />} label="Sold" color="warning" />
+                    : <Chip sx={{ margin: "3px" }} icon={<CheckCircleIcon />} label="Open" color="success" />
 
                 }
                 <Chip sx={{ margin: "3px" }} icon={<MonetizationOnIcon />} label={value.price} color="primary" />
