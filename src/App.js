@@ -23,17 +23,13 @@ import { auth } from './Config/firebase-config.js';
 function App() {
 
   const location = useLocation();
-  console.log(location);
 
   const { user } = UserAuth();
-  console.log('APP user: '+user)
 
   return (
 
     
     <div className={(location.pathname != '/SignIn' && location.pathname != '/SignUp') ? "container" : ""}>
-
-
         
         <Navbar />
 
@@ -55,7 +51,6 @@ function App() {
           <Route path='/ShoppingItem/:id' element={<PrivateRoute> <ShoppingItem /> </PrivateRoute>} />
           <Route path='/Group/:group_id' element={<PrivateRoute> <GroupItem /> </PrivateRoute>} />
  
-
         </Routes>
 
     </div>

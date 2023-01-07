@@ -39,24 +39,33 @@ const SignIn = () => {
 
 
     const handleGoogle = async (e) => {
+        
+        // Neļauj restartēt lapu:
         e.preventDefault();
-        setError('')
-        try {
-            setLoading(true);
-            const res = await signInWithGoogle()
-            const recordExists = doc(db, "users", res.user.uid).exists;
 
-            console.log(recordExists)
-            console.log(res.user.uid)
+        // Sākumā kļūdas nav:
+        setError('')
+
+        try {
+            // Aktivizē lādēšanās skatu:
+            setLoading(true);
+
+            // Pieslēdzas ar Google Auth Firebase iebūvēto funkciju:
+            const res = await signInWithGoogle()
+
+            // Mainīgais, vai eksistē lietotājs:
+            const recordExists = doc(
+                db, "users", res.user.uid
+            ).exists;
 
             const userProfileRef = doc(db, "users", res.user.uid);
             const docSnap = await getDoc(userProfileRef);
 
+            // Ja eksistē lietotājsm tad neveido, citādi izveido user:
             if (docSnap.exists()) {
-                // console.log("Document data:", docSnap.data())
                 console.log('exists')
             } else {
-                // doc.data() will be undefined in this case
+                // doc.data() nav definēts šeit.
                 console.log("No such document!")
                 setDoc(doc(db, "users", res.user.uid), {
                     birthDate: null,
@@ -72,55 +81,12 @@ const SignIn = () => {
                 });
             }
 
-
-
-
-            /*usersRef.doc(res.user.uid).get()
-                .then((docSnapshot) => {
-                    if (docSnapshot.exists) {
-                        usersRef.onSnapshot((doc) => {
-                            console.log('ir useris')
-                            // do stuff with the data
-                        });
-                    } else {
-                        console.log('nav')
-                        //usersRef.set({ ... }) // create the document
-                        setDoc(doc(db, "users", res.user.uid), {
-                            birthDate: null,
-                            email: res.user.email,
-                            firstName: null,
-                            lastName: null,
-                            gender: "Unknown",
-                            phoneNumber: null,
-                            userName: res.user.displayName,
-                            country: null,
-                            city: null,
-                            photoURL: res.user.photoURL
-                        });
-                    }
-                });*/
-
-
-
-            // Sets initial data in users collection for user with uid:
-            /*if (1 == 1) {
-                setDoc(doc(db, "users", res.user.uid), {
-                    birthDate: null,
-                    email: res.user.email,
-                    firstName: null,
-                    lastName: null,
-                    gender: "Unknown",
-                    phoneNumber: null,
-                    userName: res.user.displayName,
-                    country: null,
-                    city: null,
-                    photoURL: res.user.photoURL
-                });
-            }*/
-
+            // Sekmīgi, tad pārvieto lietotāju uz sākumlapu: 
             navigate('/')
+            // Deaktivizē lādēšanās skatu:
             setLoading(false);
         } catch (e) {
+            // Ielogo kļūdas:
             setError(e.message)
             setLoading(false)
             console.log(e)
@@ -205,10 +171,7 @@ const SignIn = () => {
                                         autoComplete="current-password"
                                     />
                                     {error ? <Typography variant="subtitle2" color={redColor} textAlign={"center"} padding={"10px 0px 20px 0px"}>The email or password did not match. Please try again.</Typography> : null}
-                                    <FormControlLabel
-                                        control={<Checkbox value="remember" color="primary" />}
-                                        label="Remember me"
-                                    />
+                                   
                                     <Button
                                         type="submit"
                                         fullWidth
@@ -225,9 +188,7 @@ const SignIn = () => {
 
                                     <Grid container>
                                         <Grid item xs>
-                                            <Link href="#" variant="body2">
-                                                Forgot password?
-                                            </Link>
+                                            
                                         </Grid>
                                         <Grid item>
                                             <Link href="/SignUp" variant="body2">

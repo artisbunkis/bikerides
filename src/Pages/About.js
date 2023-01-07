@@ -15,104 +15,104 @@ export default function About() {
       <Hero title="About"></Hero>
       <Box style={{ width: 'auto', margin: 'auto', backgroundColor: 'white', padding: 10, borderRadius: 16, maxWidth: '1380px' }}>
         <Grid container bgcolor="white" width="auto" paddingTop="20px" height="auto" borderRadius="16px" display="flex" justifyContent="center" alignItems="center">
-        <Grid item xs={12} md={8} sm={7}>
-        <Typography variant="body1">
-          Bikerides is a web based cyclist forum. I made this project as I really enjoy road cycling and everything about it. This forum is made for everyone who wants to socialize with other cycling fanatics.
-        </Typography>
-        <Typography variant="body1">
-          This forum has such functionalities:
-        </Typography>
+          <Grid item xs={12} md={8} sm={7}>
+            <Typography variant="body1">
+              Bikerides is a web based cyclist forum. I made this project as I really enjoy road cycling and everything about it. This forum is made for everyone who wants to socialize with other cycling fanatics.
+            </Typography>
+            <Typography variant="body1">
+              This forum has such functionalities:
+            </Typography>
 
-        <List
-          sx={{ width: 'auto', maxWidth: 360, margin: "auto", bgcolor: 'background.paper' }}
-        >
+            <List
+              sx={{ width: 'auto', maxWidth: 360, margin: "auto", bgcolor: 'background.paper' }}
+            >
 
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-phone" primary="Sign-Up (Email, Password, Username)" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-phone" primary="Sign-Up (Email, Password, Username)" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-phone" primary="Sign-Up with Google" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-phone" primary="Sign-Up with Google" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Sign-In" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Sign-In" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Sign-In with Google" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Sign-In with Google" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Create Group" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Create Group" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Request to Join a Group" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Request to Join a Group" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Viev Group Info" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Viev Group Info" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Send Group Messages" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Send Group Messages" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Receive Group Messages" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Receive Group Messages" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Create Shopping Items" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Create Shopping Items" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="View Shopping Items (With Contact info)" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="View Shopping Items (With Contact info)" />
+              </ListItem>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowRightIcon />
-            </ListItemIcon>
-            <ListItemText id="list-label-email" primary="Edit Profile" />
-          </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowRightIcon />
+                </ListItemIcon>
+                <ListItemText id="list-label-email" primary="Edit Profile" />
+              </ListItem>
 
-        </List>
+            </List>
           </Grid>
         </Grid>
       </Box>

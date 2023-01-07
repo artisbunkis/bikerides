@@ -15,7 +15,6 @@ const UserContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   
   const [user, setUser] = useState(null);
-  console.log('auth: '+user);
   const [loading, setLoading] = useState(true);
   
   const createUser = (email, password, username, photo) => {
@@ -39,12 +38,9 @@ export const AuthContextProvider = ({ children }) => {
 
 
   useEffect(() => {
-    console.log('laadee user');
 
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      //console.log(currentUser.email);
-      console.log('IELOGOJIES IR OK')
-      console.log(currentUser);
+
       setUser(currentUser);
       setLoading(false);
     });
@@ -52,7 +48,6 @@ export const AuthContextProvider = ({ children }) => {
 
       unsubscribe();
 
-      console.log('gatavs');
     };
   }, []);
 

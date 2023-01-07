@@ -31,6 +31,7 @@ import { UserAuth } from '../Config/AuthContext';
 import app from '../Config/firebase-config.js';
 import { useState, useEffect } from 'react';
 import SplashScreen from "../Components/SplashScreen";
+import ActionAreaCard from '../Components/Card';
 
 
 
@@ -83,22 +84,21 @@ export default function ShoppingItem({ route, navigate }) {
 
 
 
-    
+
 
   // Get data from Firestore:
   const getData = async (e) => {
+    
     setLoading(true);
     const shoppingItemRef = doc(db, "shopping", params.id);
     const docSnap = await getDoc(shoppingItemRef);
 
     if (docSnap.exists()) {
-      // console.log("Document data:", docSnap.data())
       setShoppingData(docSnap.data())
       const docRef = doc(db, "users", docSnap.data().user_id);
       const docSnap2 = await getDoc(docRef);
 
       if (docSnap2.exists()) {
-        console.log("Document data:", docSnap2.data());
         setUser(docSnap2.data());
       } else {
         // doc.data() will be undefined in this case
@@ -111,156 +111,189 @@ export default function ShoppingItem({ route, navigate }) {
       console.log("No such document!")
     }
     setLoading(false);
-   
+
   }
 
- 
+  const [shoppingList, setShoppingList] = useState([]);
+
+  const getSearchData = async () => {
+    const q = query(collection(db, "shopping"));
+    const data = onSnapshot(q, (querySnapshot) => {
+      setShoppingList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+  };
+
+
   useEffect(() => {
     getData();
-    //console.log(params.id)
-    console.log(params.id);
+    getSearchData();
+
   }, [])
 
 
   return (
-    loading ? <SplashScreen/> :
-    <Box>
-      <Grid container bgcolor="white" width="auto" height="auto" borderRadius="16px" display="flex" justifyContent="center" alignItems="center">
-        <Grid
+    loading ? <SplashScreen /> :
+      <Box>
+        <Grid container bgcolor="white" width="auto" height="auto" borderRadius="16px" display="flex" justifyContent="center" alignItems="center">
+          <Grid
 
-          item
-          height='700px'
-          xs={12}
-          sm={12}
-          md={7}
-          sx={{
-            position: "relative",
-            padding: 2,
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.white : t.palette.white,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            borderRadius: '16px 0px 0px 16px',
-            [theme.breakpoints.down('sm')]: {
-              height: 400,
-              borderRadius: '16px 16px 0px 0px',
+            item
+            height='700px'
+            xs={12}
+            sm={12}
+            md={7}
+            sx={{
+              position: "relative",
+              padding: 2,
+              backgroundRepeat: 'no-repeat',
+              backgroundColor: (t) =>
+                t.palette.mode === 'light' ? t.palette.white : t.palette.white,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              borderRadius: '16px 0px 0px 16px',
+              [theme.breakpoints.down('sm')]: {
+                height: 400,
+                borderRadius: '16px 16px 0px 0px',
 
-            },
+              },
 
-          }}
-        >
-
-          <img src={shoppingData.image}
-            width={"100%"} height={"100%"} style={{ objectFit: "cover", borderRadius: "20px 20px 20px 20px" }}></img>
-
-
-          <IconButton style={{ position: 'absolute', top: 40, right: 40 }} onClick={handleOpenImage}>
-            <ZoomInIcon style={{ color: "white", maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px' }} />
-          </IconButton>
-
-          <Modal
-            open={openImage}
-            onClose={handleCloseImage}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+            }}
           >
-            <Box sx={styleImage}>
-              <img src={shoppingData.image}
-                width={"100%"} height={"100%"} style={{ objectFit: "cover", borderRadius: "20px 20px 20px 20px" }}></img>
-            </Box>
-          </Modal>
 
-        </Grid>
+            <img src={shoppingData.image}
+              width={"100%"} height={"100%"} style={{ objectFit: "cover", borderRadius: "20px 20px 20px 20px" }}></img>
 
 
-        <Grid item xs={12} md={5} sm={12} height="auto" width="auto" alignItems="center" sx={{ verticalAlign: "center" }}>
-          <Stack textAlign="start" padding="6%" spacing={2} >
-            <h1>{shoppingData.title}</h1>
-            <Divider variant="middle" width="20%" />
-            <Typography variant="body2" color="text.secondary" textAlign={"left"} paddingRight="16px">
-              {shoppingData.desc}
-            </Typography>
-
-            <Grid container justifyContent="left" alignItems="center" marginLeft={0} marginBottom={1}>
-              <Grid item paddingRight="10px">
-                <Chip icon={<MonetizationOnIcon />} label={shoppingData.price} color="primary" />
-              </Grid>
-              <Grid item paddingRight="10px" >
-                <Chip icon={<DirectionsBikeRoundedIcon />} label={shoppingData.category} sx={{ paddingLeft: 1, backgroundColor: amber[300] }} />
-              </Grid>
-              <Grid item>
-                <Box>
-                  <Chip
-
-                    avatar={<Avatar src={shoppingData.sellerPhoto} />}
-                    label={shoppingData.sellerName}
-                    variant="filled"
-                    onClick={handleOpen}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-
-
+            <IconButton style={{ position: 'absolute', top: 40, right: 40 }} onClick={handleOpenImage}>
+              <ZoomInIcon style={{ color: "white", maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px' }} />
+            </IconButton>
 
             <Modal
-              open={open}
-              onClose={handleClose}
+              open={openImage}
+              onClose={handleCloseImage}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box sx={style}>
-                <Box sx={{ margin: "auto" }} >
-
-
-                  <List
-                    sx={{ width: 'auto', maxWidth: 360, margin: "auto", bgcolor: 'background.paper' }}
-                    subheader={<ListSubheader>Contact:</ListSubheader>}
-                  >
-                    <ListItem>
-                      <Grid container justifyContent="start" alignItems="center">
-                        <Grid item paddingRight="10px">
-                          <Avatar src={shoppingData.sellerPhoto} />
-                        </Grid>
-                        <Grid item padding="0" >
-                          <ListItemText primary={shoppingData.sellerName} />
-
-
-                        </Grid>
-                      </Grid>
-                    </ListItem>
-
-                    <ListItem>
-                      <ListItemIcon>
-                        <PhoneIcon />
-                      </ListItemIcon>
-                      <ListItemText id="list-label-phone" primary={user ? user.phoneNumber : 'No phone provided!'} />
-                    </ListItem>
-
-                    <ListItem>
-                      <ListItemIcon>
-                        <EmailIcon />
-                      </ListItemIcon>
-                      <ListItemText id="list-label-email" primary={user ? user.email : 'No email provided!'} />
-                    </ListItem>
-                  </List>
-
-                </Box>
-
-
+              <Box sx={styleImage}>
+                <img src={shoppingData.image}
+                  width={"100%"} height={"100%"} style={{ objectFit: "cover", borderRadius: "20px 20px 20px 20px" }}></img>
               </Box>
             </Modal>
 
+          </Grid>
+
+
+          <Grid item xs={12} md={5} sm={12} height="auto" width="auto" alignItems="center" sx={{ verticalAlign: "center" }}>
+            <Stack textAlign="start" padding="6%" spacing={2} >
+              <h1>{shoppingData.title}</h1>
+              <Divider variant="middle" width="20%" />
+              <Typography variant="body2" color="text.secondary" textAlign={"left"} paddingRight="16px">
+                {shoppingData.desc}
+              </Typography>
+
+              <Grid container justifyContent="left" alignItems="center" marginLeft={0} marginBottom={1}>
+                <Grid item paddingRight="10px">
+                  <Chip icon={<MonetizationOnIcon />} label={shoppingData.price} color="primary" />
+                </Grid>
+                <Grid item paddingRight="10px" >
+                  <Chip icon={<DirectionsBikeRoundedIcon />} label={shoppingData.category} sx={{ paddingLeft: 1, backgroundColor: amber[300] }} />
+                </Grid>
+                <Grid item>
+                  <Box>
+                    <Chip
+
+                      avatar={<Avatar src={shoppingData.sellerPhoto} />}
+                      label={shoppingData.sellerName}
+                      variant="filled"
+                      onClick={handleOpen}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+
+              
+
+
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Box sx={{ margin: "auto" }} >
+
+
+                    <List
+                      sx={{ width: 'auto', maxWidth: 360, margin: "auto", bgcolor: 'background.paper' }}
+                      subheader={<ListSubheader>Contact:</ListSubheader>}
+                    >
+                      <ListItem>
+                        <Grid container justifyContent="start" alignItems="center">
+                          <Grid item paddingRight="10px">
+                            <Avatar src={shoppingData.sellerPhoto} />
+                          </Grid>
+                          <Grid item padding="0" >
+                            <ListItemText primary={shoppingData.sellerName} />
+
+
+                          </Grid>
+                        </Grid>
+                      </ListItem>
+
+                      <ListItem>
+                        <ListItemIcon>
+                          <PhoneIcon />
+                        </ListItemIcon>
+                        <ListItemText id="list-label-phone" primary={user ? user.phoneNumber : 'No phone provided!'} />
+                      </ListItem>
+
+                      <ListItem>
+                        <ListItemIcon>
+                          <EmailIcon />
+                        </ListItemIcon>
+                        <ListItemText id="list-label-email" primary={user ? user.email : 'No email provided!'} />
+                      </ListItem>
+                    </List>
+
+                  </Box>
+
+
+                </Box>
+              </Modal>
 
 
 
 
-          </Stack>
-        </Grid>
-      </Grid >
 
-    </Box>
+            </Stack>
+          </Grid>
+        </Grid >
+
+        <Box bgcolor="white" width="auto" height="auto" borderRadius="16px"  style={{ marginTop: "20px", borderRadius: 16, padding: 20, }}>
+        <h1>You might like:</h1>
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  spacing={{ xs: 1, sm: 2, md: 0 }}
+                  sx={{  overflowX: "scroll", display: 'flex', flexDirection: 'row' }}
+                >
+              
+                  {shoppingList.sort((a, b) => a.itemM > b.itemM ? 1 : -1)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 5)
+                    .filter((val) => {
+                      if(val.id != params.id) return val
+                    })
+                    .map((listItem) => {
+                      return (
+                        <ActionAreaCard key={listItem.id} id={listItem.id} title={listItem.title} alt={listItem.title} sellerUserId={listItem.user_id} image={listItem.image} sellerName={listItem.sellerName} category={listItem.category} price={listItem.price} desc={listItem.desc} sellerPhoto={listItem.sellerPhoto} />
+
+                      );
+                    })}
+
+                </Stack>
+              </Box>
+      </Box>
 
   )
 }

@@ -32,15 +32,12 @@ function SimpleDialog(props) {
     onClose(selectedValue);
   };
 
-
-
-
-  
-
+  // Izveidot jaunu grupu:
   const handleCreateGroup = async (e) => {
+    // Tiek aktivizēts lādēšanās skats:
     setLoading(true);
 
-    // Sets initial data in groups collection for group with id:
+    // Izveido dokumentu grupas kolecijā ar automātiski ģenerētu grupas ID:
     const docRef = await addDoc(collection(db, "groups"), {
       group_name: groupName,
       group_admin: user.uid,
@@ -49,43 +46,26 @@ function SimpleDialog(props) {
       group_description: groupDescription,
       group_category: groupCategory
     }).then(function (docRef) {
+      
+      // Kad grupas dokuments ir izveidots, tiek ierakstīts arī ģenerētais grupas ID: 
       const groupRef = doc(db, "groups", docRef.id);
       updateDoc(groupRef, {
         group_id: docRef.id
       })
-      setDoc(doc(db, `groups/${docRef.id}/groupUsers`, user.uid), { user_id: user.uid, username: user.displayName });
-
-
+      setDoc(
+        doc(db, `groups/${docRef.id}/groupUsers`, user.uid),
+        { user_id: user.uid, username: user.displayName }
+      );
     }).then(response => {
+      // Kad grupa izveidota, tiek ielādēta lapa, lai atjaunotu datus:
       window.location.reload(false);
     });
 
+    //Tiek aizvērti dialogi un deaktivizēts lādēšanās skats:
     handleClose();
     setLoading(false);
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const { user, updateProfile } = UserAuth();
   const [groupName, setGroupName] = useState();
@@ -221,8 +201,8 @@ export default function Groups() {
             {groupLists.map((group) => {
     
           return (
-            <Box padding="0px">
-              <GroupCard title={group.group_name} group_id={group.group_id} group_admin_photoURL={group.group_admin_photoUrl} group_admin_username={group.group_admin_username}></GroupCard>
+            <Box key={group.group_id} padding="0px">
+              <GroupCard key={group.group_id} title={group.group_name} group_id={group.group_id} group_admin_photoURL={group.group_admin_photoUrl} group_admin_username={group.group_admin_username}></GroupCard>
             </Box>
 
           );

@@ -41,12 +41,11 @@ export default function GroupItem({ route, navigate }) {
     const bottomRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState('');
 
+    // Saglabā attēlu:
     const handleSave = async (file) => {
         setLoading(true);
 
         if (file) {
-
-
             const imagesRef = ref(storage, `group/${location.state.group_id}/${file.name}`);
             const docReference = doc(db, "groups", location.state.group_id);
 
@@ -64,11 +63,6 @@ export default function GroupItem({ route, navigate }) {
         setLoading(false);
         getData();
     }
-
-
-
-    // Strava:
-    const [stats, setStats] = useState(null);
 
     // Request button:
     const ColorButton = styled(Button)(({ theme }) => ({
@@ -96,19 +90,28 @@ export default function GroupItem({ route, navigate }) {
         marginBottom: 20
     }));
 
-
-    // Get data from Firestore:
+    // Iegūt datus par grupu no Firestore:
     const getData = async (e) => {
 
-        // Get & Set Group data:
-        const q = query(collection(db, "groups"), where("group_id", "==", location.state.group_id));
+        // Iegūst datus un aizpilda mainīgo masīvu groupData:
+        const q = query(
+            collection(db, "groups"), where("group_id", "==", location.state.group_id)
+        );
         const data = onSnapshot(q, (querySnapshot) => {
             setGroupData(querySnapshot.docs[0].data());
         });
 
-        // Get Requested & Accepted data:
-        const gr = query(collection(db, "groupRequests"), where("user_id", "==", user.uid), where("group_id", "==", location.state.group_id));
+        // Atgriež pieteikumu datus:
+        const gr = query(
+            collection(db, "groupRequests"), 
+            where("user_id", "==", user.uid), 
+            where("group_id", "==", location.state.group_id)
+        );
+
+        // Iegūst dokumentu snapshot:
         const querySnapshot = await getDocs(gr);
+
+        // Ja ir akceptēts, tad aizpilda mainīgo:
         if (querySnapshot.size == 0) {
             setIsRequested(false)
         } else {
@@ -116,15 +119,22 @@ export default function GroupItem({ route, navigate }) {
             setIsAccepted(querySnapshot.docs[0].data().request_accepted);
         }
 
-        // Set All messages list in ascending order by date:
-        const msgs = query(collection(db, `groups/${location.state.group_id}/messages`), orderBy("message_sent", "asc"));
+        // Atgriež un sakārto visas ziņas augošā secībā pēc datuma, lai parādītu sarakstē:
+        const msgs = query(
+            collection(db, `groups/${location.state.group_id}/messages`),
+            orderBy("message_sent", "asc")
+        );
+
+        // Izveido snapshot plūsmu visām ziņām (klausās, vai nāk jaunas):
         const unsub = onSnapshot(msgs, (querySnapshot) => {
             setMessages(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         });
 
+        // Dekativizē lādēšanās skatu:
         setLoading(false);
     }
 
+    // Iegūt grupas pieprasījumus:
     const getRequests = async () => {
         const q = query(collection(db, "groupRequests"), where("group_admin", "==", user.uid), where("request_accepted", "==", null), where("group_id", '==', location.state.group_id));
 
@@ -135,6 +145,7 @@ export default function GroupItem({ route, navigate }) {
 
     };
 
+    // Iegūt grupas lietotājus:
     const getGroupUsers = async () => {
         // Group user id's:
         const q = query(
@@ -148,7 +159,7 @@ export default function GroupItem({ route, navigate }) {
 
     };
 
-    // Set a new request to firebase:
+    // Izveidot jaunu grupas pieprasījumu:
     const handleRequestJoin = async (e) => {
 
         e.preventDefault();
@@ -189,7 +200,7 @@ export default function GroupItem({ route, navigate }) {
                 request_accepted: isAccepted,
                 request_accepted_date: serverTimestamp()
             });
-            setDoc(doc(db, `groups/${docu.data().group_id}/groupUsers`, docu.data().user_id), { user_id: docu.data().user_id, username: docu.data().username });
+            if(isAccepted) setDoc(doc(db, `groups/${docu.data().group_id}/groupUsers`, docu.data().user_id), { user_id: docu.data().user_id, username: docu.data().username });
         });
 
 
@@ -210,24 +221,6 @@ export default function GroupItem({ route, navigate }) {
 
     };
 
-    // Strava:
-    async function fetchStats() {
-        if (stats == null) {
-            const response = await fetch(
-                'https://www.strava.com/api/v3/athletes/30631816/stats',
-                {
-                    headers: {
-                        Authorization: 'Bearer cd10e298dcb4b0c330407e009c70b7c5b5424bd6'
-                    }
-                }
-            );
-            const data = await response.json();
-            setStats(data);
-        }
-
-    }
-
-
 
     useEffect(() => {
         if (messages) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -238,11 +231,7 @@ export default function GroupItem({ route, navigate }) {
         getData();
         getRequests();
         getGroupUsers();
-        console.log("now:");
-        console.log(messages);
     }, [])
-
-
 
     return (
         loading ? <SplashScreen /> :
@@ -268,17 +257,17 @@ export default function GroupItem({ route, navigate }) {
                                 <h1 style={{ marginBottom: 15 }}>Requests</h1>
                                 {groupRequestLists.map((request) => {
                                     return (
-                                        <Box padding="10px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5 }}>
+                                        <Box key={request.user_id} padding="10px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5 }}>
 
-                                            <Grid container>
-                                                <Grid item xs sx={{ margin: "auto", paddingLeft: 1.5 }}>
-                                                    <h3>{request.username}</h3>
+                                            <Grid key={request.user_id} container>
+                                                <Grid item key={request.user_id} xs sx={{ margin: "auto", paddingLeft: 1.5 }}>
+                                                    <h3 key={request.user_id}>{request.username}</h3>
                                                 </Grid>
-                                                <Grid item>
-                                                    <Button onClick={(e) => handleRequestAccept(e, 1, request.user_id)}>Accept</Button>
+                                                <Grid key={request.user_id} item>
+                                                    <Button key={request.user_id} onClick={(e) => handleRequestAccept(e, 1, request.user_id)}>Accept</Button>
                                                 </Grid>
-                                                <Grid item xs={2} sx={{ marginRight: 2 }}>
-                                                    <Button color="warning" onClick={(e) => handleRequestAccept(e, 0, request.user_id)}>Reject</Button>
+                                                <Grid key={request.user_id} item xs={2} sx={{ marginRight: 2 }}>
+                                                    <Button key={request.user_id} color="warning" onClick={(e) => handleRequestAccept(e, 0, request.user_id)}>Reject</Button>
                                                 </Grid>
                                             </Grid>
 
@@ -296,7 +285,7 @@ export default function GroupItem({ route, navigate }) {
                                     <h1 style={{ marginBottom: 15 }}>Group Information</h1>
                                 </Grid>
                                 <Grid item>
-                                    <IconButton color="primary" aria-label="upload picture" component="label">
+                                    {user.uid == groupData.group_admin ? <IconButton color="primary" aria-label="upload picture" component="label">
                                         <input
                                             accept="image/*"
                                             style={{ display: 'none' }}
@@ -305,7 +294,8 @@ export default function GroupItem({ route, navigate }) {
                                             onChange={(e) => handleSave(e.target.files[0])}
                                         />
                                         <PhotoCamera />
-                                    </IconButton>
+                                    </IconButton> : null}
+                                    
                                 </Grid>
                             </Grid>
 
@@ -332,9 +322,9 @@ export default function GroupItem({ route, navigate }) {
                                         <Box padding="10px" key={groupUser.user_id}>
 
                                             {groupUser.user_id == groupData.group_admin && groupData.group_admin == user.uid
-                                                ? <Box sx={{ display: "flex", gap: "5px", verticalAlign: "bottom" }}><h3 key={groupUser.user_id} style={{ color: "#2e82d6", marginRight: 2 }}>You</h3><h5 sx={{ margin: 2 }}>*Admin*</h5></Box>
+                                                ? <Box key={groupUser.user_id} sx={{ display: "flex", gap: "5px", verticalAlign: "bottom" }}><h3 key={groupUser.user_id} style={{ color: "#2e82d6", marginRight: 2 }}>You</h3><h5 sx={{ margin: 2 }}>*Admin*</h5></Box>
                                                 : groupUser.user_id == groupData.group_admin
-                                                    ? <Box sx={{ display: "flex", gap: "5px" }}><h3 key={groupUser.user_id} style={{ color: "#2e82d6", marginRight: 2 }}>{groupUser.username}</h3><h5>*Admin*</h5></Box>
+                                                    ? <Box key={groupUser.user_id} sx={{ display: "flex", gap: "5px" }}><h3 key={groupUser.user_id} style={{ color: "#2e82d6", marginRight: 2 }}>{groupUser.username}</h3><h5>*Admin*</h5></Box>
                                                     : <h3 key={groupUser.user_id}>{groupUser.username} </h3>}
 
 
@@ -352,17 +342,16 @@ export default function GroupItem({ route, navigate }) {
                             <h1 style={{ marginBottom: 15 }}>Group Chat</h1>
                             {isAccepted || groupData.group_admin == user.uid ?
                                 <Box padding="15px" sx={{ backgroundColor: '#f3f5f8', borderRadius: 5, minHeight: 700, flexDirection: "column-reverse", overflowY: "scroll" }}>
-                                    <div class="imessage" id="Text-Input-Box" style={{ maxHeight: 800 }}  >
+                                    <div className="imessage" id="Text-Input-Box" style={{ maxHeight: 800 }}  >
 
                                         {messages.map((msg) => {
                                             if (msg.user_id == user.uid) {
                                                 return (
-                                                    <p class="from-me">{msg.message}</p>
+                                                    <p key={msg.message} className="from-me">{msg.message}</p>
                                                 )
                                             } else {
-
                                                 return (
-                                                    <Grid container wrap="nowrap"  >
+                                                    <Grid key={msg.message} container wrap="nowrap"  >
                                                         <Grid item sx={{ marginTop: "auto", marginBottom: "auto", paddingRight: 1.5 }}>
                                                             <Tooltip title={msg.username}>
                                                                 <Avatar alt={msg.user_alt} src={msg.photoURL}>{msg.user_alt}</Avatar>
@@ -370,29 +359,21 @@ export default function GroupItem({ route, navigate }) {
 
                                                         </Grid>
                                                         <Grid item>
-                                                            <p class="from-them">{msg.message}</p>
+                                                            <p className="from-them">{msg.message}</p>
                                                         </Grid>
-
-
-
                                                     </Grid>
-
                                                 )
                                             }
-
                                         })}
                                         <div ref={bottomRef}></div>
                                     </div>
 
                                     <Box id="Text-Input-Box" sx={{ backgroundColor: 'white', height: 60, borderRadius: 6, margin: "auto", paddingLeft: 3, paddingRight: 3, paddingTop: "15px", width: "auto" }}>
-
                                         <TextField
                                             onChange={(e) => setMessageText(e.target.value)}
                                             onKeyPress={(ev) => {
-                                                console.log(`Pressed keyCode ${ev.key}`);
                                                 if (ev.key === 'Enter') {
                                                     // Do code here
-                                                    console.log(messageText)
                                                     sendMessage(messageText);
                                                     setMessageText('');
                                                 }
@@ -408,8 +389,6 @@ export default function GroupItem({ route, navigate }) {
                         </Box>
                     </Grid>
                 </Grid>
-
             </Box>
-
     )
 }

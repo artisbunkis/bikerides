@@ -11,24 +11,27 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { CardActionArea } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-
 
 
 export default function ActionAreaCard(props) {
 
+    // Mainīgo deklarēšana:
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [imageIsLoading, setImageIsLoading] = useState(true);
+    const [image, setImage] = useState({});
+
+    // Funkcija, kas spiežot uz kartes aizved uz Shopping item:
     const handleOnClick = useCallback(() => navigate(`/ShoppingItem/${props.id}`, { state: { id: props.id, title: props.title, sellerUserId: props.sellerUserId, image: props.image, desc: props.desc, category: props.category, price: props.price, sellerName: props.sellerName, sellerPhoto: props.sellerPhoto } }, { replace: true }), [navigate]);
 
-    const [loading, setLoading] = useState(true);
-
+    // Funkcija, kas ielādē attēlu:
     function handleImageLoad() {
         setLoading(false);
     }
 
-    const [imageIsLoading, setImageIsLoading] = useState(true);
-    const [image, setImage] = useState({});
+    // Attēls ielādējies:
     const handleImageLoaded = () => {
         setImageIsLoading(false);
     };

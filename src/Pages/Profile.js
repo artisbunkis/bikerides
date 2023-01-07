@@ -455,8 +455,6 @@ export default function Profile() {
     }),
   );
 
-  // ️👇️ {'name' => 'Tom', 'country' => 'Chile'}
-  //console.log(map1);
 
   const [userProfile, setUserProfile] = useState([null]);
   const { user, updateProfile } = UserAuth();
@@ -485,7 +483,6 @@ export default function Profile() {
     const docSnap = await getDoc(userProfileRef);
 
     if (docSnap.exists()) {
-      // console.log("Document data:", docSnap.data())
       setUserProfile(docSnap.data())
 
       setLoading(false);
@@ -494,7 +491,6 @@ export default function Profile() {
       console.log("No such document!")
     }
     setGender(userProfile.gender)
-    console.log(user)
   }
 
   useEffect(() => {
@@ -505,13 +501,15 @@ export default function Profile() {
   // Upload data to firestore:
   const handleSave = async (e) => {
 
+    // Neļauj restartēt lapu:
     e.preventDefault();
+    // Sākumā kļūdas nav:
     setError('')
 
     try {
-
+      // Aktivizē lādēšanās skatu:
       setLoading(true);
-      //console.log(gender)
+      // Atjauno lietotāja dokumentu users kolekcijā:
       await updateDoc(userProfileRef, {
         firstName: firstName === "" ? null : (!firstName ? userProfile.firstName : firstName),
         lastName: lastName === "" ? null : (!lastName ? userProfile.lastName : lastName),
@@ -522,28 +520,24 @@ export default function Profile() {
         birthDate: birthDate ? birthDate : userProfile.birthDate,
       });
 
-      console.log(selectedFile);
-
+      // Ja ir izvēlēts fails, to augšupielādē Firebase Storage un atjauno saiti users kolekcijā:
       if (selectedFile) {
         const uploadTask = await uploadBytesResumable(imagesRef, selectedFile);
         const url = await getDownloadURL(uploadTask.ref)
 
-        console.log(url)
         updateProfile(user, { photoURL: url });
         await updateDoc(userProfileRef, {
           photoURL: url,
         });
       }
 
-
-
-
+      // Atgriež jaunos datus:
       await getData();
+      // Deaktivizē lādēšanās skatu:
       setLoading(false);
     } catch (e) {
       setError(e.message)
       setLoading(false)
-
     }
   };
 
@@ -718,7 +712,6 @@ export default function Profile() {
                       value={birthDate ? birthDate : (userProfile.birthDate ? userProfile.birthDate.toDate() : null)}
                       onChange={(newValue) => {
                         setBirthDate(newValue.$d);
-                        console.log(newValue);
                       }}
                       renderInput={(params) => <TextField {...params} />}
                     />
