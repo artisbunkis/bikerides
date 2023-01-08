@@ -5,37 +5,29 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect } from 'react';
-import { collection, doc, getDoc, updateDoc, serverTimestamp, query, onSnapshot, where, deleteDoc } from "firebase/firestore";
-import { getStorage, ref, getDownloadURL, uploadBytesResumable, list } from "firebase/storage";
-import { db, storage } from "../Config/firebase-config";
+import { collection, doc, getDoc, updateDoc, query, onSnapshot, where, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { db } from "../Config/firebase-config";
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
-import SplashScreen from "../Components/SplashScreen";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Fab from '@mui/material/Fab';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import axios from 'axios';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
-import ActionAreaCard from '../Components/Card';
 import Chip from '@mui/material/Chip';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -43,10 +35,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function Profile() {
 
-
-
-
-
+  // Valstu saraksts
   const countries = [
     { code: 'AD', label: 'Andorra', phone: '376' },
     {
@@ -478,7 +467,6 @@ export default function Profile() {
     }),
   );
 
-
   const [userProfile, setUserProfile] = useState([null]);
   const { user, updateProfile } = UserAuth();
   const userProfileRef = doc(db, "users", user.uid);
@@ -496,13 +484,17 @@ export default function Profile() {
   const [birthDate, setBirthDate] = useState();
   const [groupLists, setGroupList] = useState([]);
 
+  const [checked, setChecked] = useState([]);
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
+
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
   const [selectedFile, setSelectedFile] = useState('');
   const storage = getStorage();
   const imagesRef = ref(storage, `profileImages/${user.uid}/${selectedFile.name}`);
-  const [imgUrl, setImgUrl] = useState(null);
 
-  // Groups
-  // Get all groups list:
+  // Iegūt visas lietotāja izviedotās grupas:
   const getGroups = async () => {
     const q = query(collection(db, "groups"), where("group_admin", '==', user.uid));
     const data = onSnapshot(q, (querySnapshot) => {
@@ -510,22 +502,17 @@ export default function Profile() {
     });
   }
 
-  /////////////////////////////////////////////////////////////////
-  //Checklist
+  // Checklistam (nav funkcija)
   function not(a, b) {
     return a.filter((value) => b.indexOf(value) === -1);
   }
 
+  // Checklistam (intersection funkcija)
   function intersection(a, b) {
     return a.filter((value) => b.indexOf(value) !== -1);
   }
-  const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([]);
-  const [right, setRight] = useState([]);
 
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
-
+  // Tiek ieķeksēts sludinājums:
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -539,7 +526,7 @@ export default function Profile() {
     setChecked(newChecked);
   };
 
-
+  // Sludinājums tiek padarīts pārdots/dzēsts:
   const handleCheckedRight = async () => {
     leftChecked.forEach(item => {
       const itemRef = doc(db, "shopping", item.id);
@@ -552,6 +539,7 @@ export default function Profile() {
     setChecked(not(checked, leftChecked));
   };
 
+  // Sludinājums tiek padarīts pieejams:
   const handleCheckedLeft = async () => {
     rightChecked.forEach(item => {
       const itemRef = doc(db, "shopping", item.id);
@@ -564,10 +552,7 @@ export default function Profile() {
     setChecked(not(checked, rightChecked));
   };
 
-
-
-  const [shoppingList, setShoppingList] = useState([]);
-
+  // Iegūt visus sludinājumus:
   const getSearchData = async () => {
     setLoading(true);
     const q1 = query(collection(db, "shopping"), where("user_id", '==', user.uid), where("sold", '==', false));
@@ -584,6 +569,7 @@ export default function Profile() {
 
   };
 
+  // Saraksts ar lietotāja izveidotajiem sludinājumiem:
   const customList = (shoppingList) => (
     <Paper sx={{ width: "550px", height: "auto", maxHeight: "800px", overflow: 'auto', border: 0, boxShadow: "none" }}>
       <List dense component="div" role="list">
@@ -624,9 +610,8 @@ export default function Profile() {
       </List>
     </Paper>
   );
-  /////////////////////////////////////////////////////////////////
 
-  // Get data from Firestore:
+  // Iegūt datus par profila info:
   const getData = async (e) => {
 
     const userProfileRef = doc(db, "users", user.uid);
@@ -641,19 +626,10 @@ export default function Profile() {
       console.log("No such document!")
     }
     setGender(userProfile.gender)
-   
+
   }
 
-  useEffect(() => {
-
-
-    getData();
-    getSearchData();
-    getGroups();
-
-  }, [])
-
-  // Upload data to firestore:
+  // Saglabāt profila datus:
   const handleSave = async (e) => {
 
     // Neļauj restartēt lapu:
@@ -696,7 +672,7 @@ export default function Profile() {
     }
   };
 
-  // Upload data to firestore:
+  // Dzēst lietotāja izviedotās grupas:
   const deleteGroup = async (e, groupID) => {
 
     // Neļauj restartēt lapu:
@@ -715,6 +691,12 @@ export default function Profile() {
     setLoading(false);
   };
 
+  // UseEffect klausīšanās funkcija:
+  useEffect(() => {
+    getData();
+    getSearchData();
+    getGroups();
+  }, [])
 
   return (
     <Box>

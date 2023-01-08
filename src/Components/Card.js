@@ -18,7 +18,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 export default function ActionAreaCard(props) {
 
     // Mainīgo deklarēšana:
-    
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [imageIsLoading, setImageIsLoading] = useState(true);
@@ -37,12 +36,12 @@ export default function ActionAreaCard(props) {
         setImageIsLoading(false);
     };
 
+    // Klausīšanās funkcija:
     useEffect(() => {
         const image = new Image();
         image.onload = handleImageLoaded;
         image.src = props.image;
         setImage(image);
-      
     }, []);
 
     return (
@@ -60,9 +59,6 @@ export default function ActionAreaCard(props) {
                         alt={props.alt}
                     />}
 
-
-
-
                     <CardContent>
                         <Grid container spacing={2} justifyContent="center" alignItems="center" marginLeft={0} marginBottom={1}>
                             <Grid item xs={6} padding="0">
@@ -78,7 +74,6 @@ export default function ActionAreaCard(props) {
                             </Grid>
                         </Grid>
 
-
                         <Box sx={{
                             textOverflow: 'ellipsis',
                             overflow: 'hidden',
@@ -91,8 +86,6 @@ export default function ActionAreaCard(props) {
                                 {props.desc}
                             </Typography>
                         </Box>
-
-
 
                     </CardContent>
                     <Box>

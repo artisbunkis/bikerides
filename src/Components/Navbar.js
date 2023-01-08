@@ -1,11 +1,10 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom"
 import { React, useRef, useState } from "react";
-import { FaBars, FaTimes, FaUser } from "react-icons/fa"
+import { FaBars, FaTimes } from "react-icons/fa"
 import { useNavigate, useLocation } from 'react-router-dom';
 import { UserAuth } from '../Config/AuthContext';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import Fade from '@mui/material/Fade';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -19,18 +18,16 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import Box from '@mui/material/Box';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Person from '@mui/icons-material/Person';
-import Settings from '@mui/icons-material/Settings';
 import Drawer from '@mui/material/Drawer';
 import Logout from '@mui/icons-material/Logout';
 import { blue } from '@mui/material/colors';
 
 
-
 export default function Navbar() {
 
     const location = useLocation();
+    
+    const navRef = useRef();
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -48,31 +45,27 @@ export default function Navbar() {
     const navigate = useNavigate();
 
     const navigateToProfile = () => {
-        // 👇️ navigate to /contacts
         navigate('/Profile');
     };
     const navigateToHome = () => {
-        // 👇️ navigate to /contacts
         navigate('/');
     };
     const navigateToShopping = () => {
-        // 👇️ navigate to /contacts
         navigate('/Shopping');
     };
     const navigateToAbout = () => {
-        // 👇️ navigate to /contacts
         navigate('/About');
     };
     const navigateToGroups = () => {
-        // 👇️ navigate to /contacts
         navigate('/Groups');
     };
 
-    // Drawer
+    // Drawer:
     const [state, setState] = useState({
         right: false
     });
 
+    // Atvērt/aizvērt drawer:
     const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -81,7 +74,7 @@ export default function Navbar() {
         setState({ ...state, [anchor]: open });
     };
 
-
+    // Atslēgties no sistēmas:
     const handleLogout = async () => {
         handleClose();
         try {
@@ -92,13 +85,12 @@ export default function Navbar() {
         }
     };
 
-    const navRef = useRef();
-
+    // Parādīt navigācijas joslu:
     const showNavbar = () => {
         navRef.current.classList.toggle("responsive_nav");
     }
 
-    // Priekš Drawer
+    // Saraksts priekš drawer:
     const list = (anchor) => (
         <Box
             sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300 }}
@@ -157,11 +149,7 @@ export default function Navbar() {
         </Box>
     );
 
-
-
-
     return (user && (location.pathname != '/SignIn' && location.pathname != '/SignUp')) ? (
-
 
         <header>
             <Link to="/" className="site-title"><img src="https://svgshare.com/i/oWd.svg" width="150px"></img></Link>
@@ -177,7 +165,6 @@ export default function Navbar() {
                 </button>
             </nav>
 
-
             <IconButton
                 className="nav-btn-desktop"
                 onClick={handleClick}
@@ -189,8 +176,6 @@ export default function Navbar() {
             >
                 <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar>
             </IconButton>
-
-
 
             <div className="desktop-profile-icon" sx={{ borderRadius: "25px" }}>
 
@@ -242,8 +227,6 @@ export default function Navbar() {
                     </MenuItem>
                 </Menu>
             </div>
-
-
 
             <button className="nav-btn" onClick={toggleDrawer("right", true)}>
                 <FaBars />

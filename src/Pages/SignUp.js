@@ -28,7 +28,7 @@ const SignUp = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
 
-
+    // Piereģistrēšanās poga ar E-pastu un paroli:
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -159,7 +159,6 @@ const SignUp = () => {
         </ThemeProvider>
     );
 }
-
 
 export default SignUp;
 

@@ -7,22 +7,17 @@ import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { CardActionArea } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, getDocs, getDoc, setDoc, doc, updateDoc, serverTimestamp, where, query, onSnapshot } from "firebase/firestore";
-import { db, storage } from "../Config/firebase-config";
-import { UserAuth } from '../Config/AuthContext';
+import { collection, where, query, onSnapshot } from "firebase/firestore";
+import { db } from "../Config/firebase-config";
 import { useState, useEffect } from 'react';
-import { DiscountSharp } from '@mui/icons-material';
 import CircularProgress from '@mui/material/CircularProgress';
-
 
 
 export default function GroupCard(props) {
 
-    const { user, updateProfile } = UserAuth();
     const [groupData, setGroupData] = useState([null]);
 
     const navigate = useNavigate();
@@ -30,17 +25,15 @@ export default function GroupCard(props) {
 
     const [loading, setLoading] = useState(true);
 
-    function handleImageLoad() {
-        setLoading(false);
-    }
-
     const [imageIsLoading, setImageIsLoading] = useState(true);
     const [image, setImage] = useState({});
+    
+    // Kad attēls ir ielādējies:
     const handleImageLoaded = () => {
         setImageIsLoading(false);
     };
 
-    // Get data from Firestore:
+    // Iegūt grupas datus:
     const getData = async (e) => {
         setLoading(true)
 
@@ -57,14 +50,10 @@ export default function GroupCard(props) {
         setLoading(false);
     }
 
+    // Klausīšanās funkcija:
     useEffect(() => {
         getData();
-        
     }, [])
-
-
-
-
 
     return (
         <Box sx={{ padding: 2 }}>
@@ -94,14 +83,12 @@ export default function GroupCard(props) {
                             </Grid>
                             <Grid item xs={6} padding="0" >
                                 <Chip
-
                                     avatar={<Avatar src={props.group_admin_photoURL} />}
                                     label={props.group_admin_username}
                                     variant="filled"
                                 />
                             </Grid>
                         </Grid>
-
 
                         <Box sx={{
                             textOverflow: 'ellipsis',
@@ -115,8 +102,6 @@ export default function GroupCard(props) {
                                 {props.category}
                             </Typography>
                         </Box>
-
-
 
                     </CardContent>
 

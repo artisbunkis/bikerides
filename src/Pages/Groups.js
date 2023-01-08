@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { UserAuth } from '../Config/AuthContext';
-import { db, storage } from "../Config/firebase-config";
+import { db } from "../Config/firebase-config";
 import Stack from '@mui/material/Stack';
 import SplashScreen from "../Components/SplashScreen";
 import InputLabel from '@mui/material/InputLabel';
@@ -23,13 +23,17 @@ import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
-
-
-// Create a group dialog function:
+// Grupas izveidošanas dialogs:
 function SimpleDialog(props) {
   const { onClose, selectedValue, open } = props;
   const [loading, setLoading] = useState(false);
+  const { user, updateProfile } = UserAuth();
+  const [groupName, setGroupName] = useState();
+  const [groupDescription, setGroupDescription] = useState();
+  const [groupCategory, setGroupCategory] = useState("None");
+  const formRef = React.useRef();
 
+  // Aizvērt dialogu:
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -68,13 +72,6 @@ function SimpleDialog(props) {
     setLoading(false);
 
   }
-
-  const { user, updateProfile } = UserAuth();
-  const [groupName, setGroupName] = useState();
-  const [groupDescription, setGroupDescription] = useState();
-  const [groupCategory, setGroupCategory] = useState("None");
-
-  const formRef = React.useRef();
 
   return (
     loading ? <SplashScreen /> :
@@ -141,28 +138,23 @@ SimpleDialog.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
-
-
-
 export default function Groups() {
 
-  const { user, updateProfile } = UserAuth();
   const [groupLists, setGroupList] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(true);
 
-
-  // Handle dialog open:
+  // Atvērt dialogu:
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // Handle dialog close:
+  // Aizvērt dialogu:
   const handleClose = (value) => {
     setOpen(false);
   };
 
-  // Get all groups list:
+  // Iegūt visas grupas:
   const getGroups = async () => {
     setLoading(true);
     const q = query(collection(db, "groups"));
@@ -172,11 +164,11 @@ export default function Groups() {
 
   }
 
+  // UseEffect klausīšanās funkcija:
   useEffect(() => {
     getGroups();
     setLoading(false);
   }, []);
-
 
 
   return (
@@ -184,8 +176,6 @@ export default function Groups() {
       <Hero title="Groups"></Hero>
 
       <SimpleDialog open={open} onClose={handleClose} />
-
-
 
       <Fab color="primary" onClick={handleClickOpen} aria-label="add" sx={{
         margin: 0,
@@ -206,25 +196,25 @@ export default function Groups() {
             spacing={{ xs: 1, sm: 2, md: 0 }}
             sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
           >
-            {groupLists.map((group) => {
-
-              return (
-                <Box key={group.group_id} padding="0px">
-                  <GroupCard key={group.group_id} title={group.group_name} group_id={group.group_id} group_admin_photoURL={group.group_admin_photoUrl} group_admin_username={group.group_admin_username}></GroupCard>
-                </Box>
-
-              );
-            })}
+            {groupLists
+              .map((group) => {
+                return (
+                  <Box key={group.group_id} padding="0px">
+                    <GroupCard
+                      key={group.group_id}
+                      title={group.group_name}
+                      group_id={group.group_id}
+                      group_admin_photoURL={group.group_admin_photoUrl}
+                      group_admin_username={group.group_admin_username}>
+                    </GroupCard>
+                  </Box>
+                );
+              })
+            }
 
           </Stack>
         }
       </Box>
-
-
-
-
-
     </Box>
-
   )
 }

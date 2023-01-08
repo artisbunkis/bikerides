@@ -5,8 +5,7 @@ import { UserAuth } from '../Config/AuthContext';
 const AuthenticatedRoute = ({ children }) => {
   const { user } = UserAuth();
 
-
-  if (user!==null) {
+  if (user !== null) {
 
     return <Navigate to='/' />;
   }

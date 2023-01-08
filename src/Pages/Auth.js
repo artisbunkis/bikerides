@@ -9,23 +9,24 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [pending, setPending] = useState(true);
 
+  // Klausīšanās funkcija:
   useEffect(() => {
     app.auth().onAuthStateChanged((user) => {
-      setCurrentUser(user)
-      setPending(false)
+      setCurrentUser(user);
+      setPending(false);
     });
   }, []);
 
   // Ja lādējas:
   if (pending) {
-    return <>Loading...</>
+    return <>Loading...</>;
   }
 
   // Ja izdodas autorizēties, tad atgriež lietotāja kontekstu:
   return (
     <AuthContext.Provider
       value={{
-        currentUser
+        currentUser,
       }}
     >
       {children}

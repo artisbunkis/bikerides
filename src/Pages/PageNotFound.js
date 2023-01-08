@@ -2,6 +2,6 @@ import Hero from "../Components/Hero"
 
 export default function PageNotFound() {
     return (
-      <Hero title="PageNotFound"></Hero>  
+      <Hero title="Page not found!"></Hero>  
     )
   }

@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect, useRef } from 'react';
-import { collection, addDoc, getDocs, getDoc, setDoc, doc, updateDoc, deleteDoc, serverTimestamp, where, orderBy, query, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDocs, setDoc, doc, updateDoc, deleteDoc, serverTimestamp, where, orderBy, query, onSnapshot } from "firebase/firestore";
 import { db } from "../Config/firebase-config";
 import * as React from 'react';
 import SplashScreen from "../Components/SplashScreen";
@@ -14,12 +14,11 @@ import TextField from '@mui/material/TextField';
 import { Avatar } from "@mui/material";
 import { Tooltip } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage } from "../Config/firebase-config";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Chip from '@mui/material/Chip';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { amber } from '@mui/material/colors';
 import DirectionsBikeRoundedIcon from '@mui/icons-material/DirectionsBikeRounded';
 
@@ -64,7 +63,7 @@ export default function GroupItem({ route, navigate }) {
         getData();
     }
 
-    // Request button:
+    // Request poga:
     const ColorButton = styled(Button)(({ theme }) => ({
         color: theme.palette.getContrastText("#1976d2"),
         width: "100%",
@@ -77,7 +76,7 @@ export default function GroupItem({ route, navigate }) {
         marginBottom: 20
     }));
 
-    // Waiting for request approval button:
+    // Waiting for request approval poga:
     const AccentButton = styled(Button)(({ theme }) => ({
         color: theme.palette.getContrastText("#231f20"),
         width: "100%",
@@ -215,7 +214,7 @@ export default function GroupItem({ route, navigate }) {
         }
     };
 
-    // Accept the request as admin:
+    // Akceptēt pieteikumu kā administrators:
     const handleRequestAccept = async (e, isAccepted, user_id) => {
 
         if(isAccepted == 0) {
@@ -250,7 +249,7 @@ export default function GroupItem({ route, navigate }) {
 
     };
 
-    // Send a message: 
+    // Sūtīt message: 
     const sendMessage = async (messageText) => {
 
         addDoc(collection(db, `groups/${groupData.group_id}/messages`), {
@@ -265,12 +264,13 @@ export default function GroupItem({ route, navigate }) {
 
     };
 
-
+    // Kad jauns message:
     useEffect(() => {
         if (messages) bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
 
     }, [messages])
 
+    // Klausās notikumus:
     useEffect(() => {
         getData();
         getRequests();

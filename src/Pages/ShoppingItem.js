@@ -1,13 +1,11 @@
-import Hero from "../Components/Hero"
 import { useLocation, useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -23,16 +21,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import ListSubheader from '@mui/material/ListSubheader';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
-import { collection, getDocs, doc, getDoc, where, orderBy, query, onSnapshot } from 'firebase/firestore';
+import { collection, doc, getDoc, where, query, onSnapshot } from 'firebase/firestore';
 import { getFirestore } from "@firebase/firestore";
-import { useNavigate } from 'react-router-dom';
-import { UserAuth } from '../Config/AuthContext';
 import app from '../Config/firebase-config.js';
 import { useState, useEffect } from 'react';
 import SplashScreen from "../Components/SplashScreen";
 import ActionAreaCard from '../Components/Card';
-
 
 
 const style = {
@@ -61,12 +55,9 @@ const styleImage = {
 const theme = createTheme();
 
 export default function ShoppingItem({ route, navigate }) {
-  const location = useLocation();
 
   const db = getFirestore(app);
   const [user, setUser] = useState([]);
-  const usersCollectionRef = collection(db, "users");
-
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -77,16 +68,13 @@ export default function ShoppingItem({ route, navigate }) {
   const handleCloseImage = () => setOpenImage(false);
 
   const [shoppingData, setShoppingData] = useState([]);
+  const [shoppingList, setShoppingList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 👇️ get ID from url
+  // Iegūt saites URL ID:
   const params = useParams();
 
-
-
-
-
-  // Get data from Firestore:
+  // Iegūt sludinājuma datus:
   const getData = async (e) => {
     
     setLoading(true);
@@ -114,8 +102,7 @@ export default function ShoppingItem({ route, navigate }) {
 
   }
 
-  const [shoppingList, setShoppingList] = useState([]);
-
+  // Iegūt visus sludinājumus tādai pašai sludinājuma kategorijai:
   const getSearchData = async () => {
     const q = query(collection(db, "shopping"), where("sold", "==", false));
     const data = onSnapshot(q, (querySnapshot) => {
@@ -123,13 +110,11 @@ export default function ShoppingItem({ route, navigate }) {
     });
   };
 
-
+  // Klausīšanās funkcija konkrētajam sludinājumam:
   useEffect(() => {
     getData();
     getSearchData();
-
   }, [params])
-
 
   return (
     loading ? <SplashScreen /> :
@@ -154,9 +139,7 @@ export default function ShoppingItem({ route, navigate }) {
               [theme.breakpoints.down('sm')]: {
                 height: 400,
                 borderRadius: '16px 16px 0px 0px',
-
               },
-
             }}
           >
 
@@ -211,9 +194,6 @@ export default function ShoppingItem({ route, navigate }) {
                 </Grid>
               </Grid>
 
-              
-
-
               <Modal
                 open={open}
                 onClose={handleClose}
@@ -261,10 +241,6 @@ export default function ShoppingItem({ route, navigate }) {
 
                 </Box>
               </Modal>
-
-
-
-
 
             </Stack>
           </Grid>

@@ -11,23 +11,15 @@ import Profile from './Pages/Profile';
 import PageNotFound from './Pages/PageNotFound';
 import React from 'react';
 import { Route, Routes, useLocation } from "react-router-dom"
-import { AuthContextProvider, user, UserAuth } from "./Config/AuthContext";
 import PrivateRoute from "./Config/PrivateRoute";
 import AuthenticatedRoute from "./Config/AuthenticatedRoute";
 import SplashScreen from "./Components/SplashScreen"
-import { createContext, useContext, useEffect, useState } from 'react';
-import {   onAuthStateChanged } from 'firebase/auth';
-import { auth } from './Config/firebase-config.js';
-
 
 function App() {
 
   const location = useLocation();
 
-  const { user } = UserAuth();
-
   return (
-
     
     <div className={(location.pathname != '/SignIn' && location.pathname != '/SignUp') ? "container" : ""}>
         
@@ -55,16 +47,8 @@ function App() {
 
     </div>
 
-
-
-
-
   );
 }
-
-
-
-
 
 export default App;
 

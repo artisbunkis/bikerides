@@ -1,5 +1,6 @@
 export default function Home() {
 
+  // Attēla stils:
   const thumbnail = {
     borderRadius: "25px",
     width: "100%",
@@ -9,7 +10,7 @@ export default function Home() {
     position: "relative",
   }
 
-
+  // Apraksta stils:
   const caption = {
     position: "absolute",
     margin: "auto",
@@ -25,16 +26,12 @@ export default function Home() {
   }
 
   return (
-
-
     <div className="thumb" style={thumbnail}>
       <div>
         <img src="https://images.unsplash.com/photo-1601625193660-86f2807b024b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" style={{borderRadius: "25px", objectFit: "cover"}}  width="100%" height="960px"/>
           <h1 className="text_over_image" style={caption}>Welcome.</h1>
       </div>
     </div>
-
-
   )
 
 }

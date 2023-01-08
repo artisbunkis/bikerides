@@ -7,15 +7,12 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Hero from "../Components/Hero"
 import usePagination from "../Components/Pagination"
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SearchIcon from '@mui/icons-material/Search';
-import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { UserAuth } from '../Config/AuthContext';
 import { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, setDoc, doc, updateDoc, onSnapshot, query, where } from "firebase/firestore";
-import { db, storage } from "../Config/firebase-config";
+import { collection, addDoc, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../Config/firebase-config";
 import PropTypes from 'prop-types';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -25,37 +22,37 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import FormGroup from '@mui/material/FormGroup';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Pagination from '@mui/material/Pagination';
 
 
-// Create a group dialog function:
+// Izveidot sludinājumu dialogs:
 function SimpleDialog(props) {
 
   const [loading, setLoading] = useState(true);
   const { onClose, selectedValue, open } = props;
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-
-
-  const { user, updateProfile } = UserAuth();
-  const [groupName, setGroupName] = useState();
+  const { user } = UserAuth();
+  const formRef = React.useRef();
 
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [category, setCategory] = useState("None");
   const [price, setPrice] = useState([]);
 
+
   const [selectedFile, setSelectedFile] = useState('');
   const [preview, setPreview] = useState()
   const storage = getStorage();
 
+  // Aizvērt dialogu:
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  // Klausīšanās funkcija sludinājuma attēlam:
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined)
@@ -67,7 +64,7 @@ function SimpleDialog(props) {
     }
   }, [selectedFile])
 
-
+  // Saglabāt jeb izveidot sludinājumu:
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -95,8 +92,6 @@ function SimpleDialog(props) {
     })
 
   }
-
-  const formRef = React.useRef();
 
   return (
 
@@ -225,47 +220,42 @@ SimpleDialog.propTypes = {
 
 export default function Shopping() {
 
-  // Pagination variables:
+  // Pagination mainīgie:
   let [page, setPage] = useState(1);
   const PER_PAGE = 6;
   const [count, setCount] = useState([]);
+  const _DATA = usePagination(shoppingList, PER_PAGE);
 
   const [open, setOpen] = React.useState(false);
   const [searchValue, setSearchValue] = useState([]);
   const [shoppingList, setShoppingList] = useState([]);
-  //const [_DATA, _setDATA] = useState([]);
-  const _DATA = usePagination(shoppingList, PER_PAGE);
 
-  const dataTemp = usePagination(shoppingList, PER_PAGE)
-
+  // Iegūt sludinājumus:
   const getSearchData = async () => {
     const q = query(collection(db, "shopping"), where("sold", "==", false));
     const data = onSnapshot(q, (querySnapshot) => {
       setCount(Math.ceil(querySnapshot.docs.length / PER_PAGE));
       setShoppingList(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-
-
     });
-
-
   };
 
-  // Handle dialog open:
+  // Atvērt dialogu::
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  // Handle dialog close:
+  // Aizvērt dialogu:
   const handleClose = (value) => {
     setOpen(false);
   };
 
-  // Pagination change page:
+  // Pagination mainīt page:
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
   };
 
+  // Klausīšanās funkcija:
   useEffect(() => {
     getSearchData();
   }, []);
@@ -276,8 +266,6 @@ export default function Shopping() {
     <Box margin="auto" maxWidth="1920px">
       <SimpleDialog open={open} onClose={handleClose} />
       <Hero title="Shopping" desc="This is page for shopping items." />
-
-
 
       <Fab color="primary" onClick={handleClickOpen} aria-label="add" sx={{
         margin: 0,
@@ -290,28 +278,19 @@ export default function Shopping() {
         <AddIcon />
       </Fab>
 
-
       <Box style={{ width: 'auto', margin: 'auto', backgroundColor: 'white', padding: 10, borderRadius: 16, maxWidth: '1380px' }}>
-
-
-
 
         <Box sx={{ height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: 1.5 }} >
           <Box sx={{ minWidth: 380, margin: 'auto' }} >
             <Box id="Text-Input-Box" sx={{ backgroundColor: '#f3f5f8', height: 60, borderRadius: 6, margin: "auto", paddingLeft: 3, paddingRight: 3, paddingTop: "15px", width: "auto" }}>
-
               <TextField
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={searchValue}
                 fullwidth="true" placeholder="Search..." width="1000px" variant="standard" InputProps={{ disableUnderline: true }} sx={{ width: "100%", '& legend': { display: 'none' }, '& fieldset': { top: 0 }, }}
               />
             </Box>
-
-
           </Box>
         </Box>
-
-
 
         <Box style={{ borderRadius: 16, padding: 20 }}>
           <Stack
@@ -351,13 +330,9 @@ export default function Shopping() {
                   );
                 })
             }
-
-
-
-
-
           </Stack>
         </Box>
+
         {searchValue == "" ? <Pagination
           count={count}
           size="large"

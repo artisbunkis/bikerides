@@ -17,37 +17,34 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   
-  const createUser = (email, password, username, photo) => {
-
+  // Izveidot lietotāju:
+  const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password)
   };
-
  
-
-   const signIn = (email, password) =>  {
+  // Pieslēgties sistēmai:
+  const signIn = (email, password) =>  {
     return signInWithEmailAndPassword(auth, email, password)
-   }
-
-  const logout = () => {
-      return signOut(auth)
   }
 
+  // Atslēgties no sistēmas:
+  const logout = () => {
+    return signOut(auth)
+  }
+
+  // Pieslēgties ar Google:
   const signInWithGoogle = () => {
     return signInWithPopup(auth, googleProvider);
   }
 
-
+  // Klausīšanās funkcija (ja izlogojas):
   useEffect(() => {
-
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-
       setUser(currentUser);
       setLoading(false);
     });
     return () => {
-
       unsubscribe();
-
     };
   }, []);
 
