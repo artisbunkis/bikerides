@@ -224,11 +224,12 @@ export default function Shopping() {
   let [page, setPage] = useState(1);
   const PER_PAGE = 6;
   const [count, setCount] = useState([]);
+  const [shoppingList, setShoppingList] = useState([]);
   const _DATA = usePagination(shoppingList, PER_PAGE);
 
   const [open, setOpen] = React.useState(false);
   const [searchValue, setSearchValue] = useState([]);
-  const [shoppingList, setShoppingList] = useState([]);
+
 
   // Iegūt sludinājumus:
   const getSearchData = async () => {
@@ -303,7 +304,7 @@ export default function Shopping() {
                 .filter((val) => {
                   if (searchValue == "") {
                     return val
-                  } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
+                  } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.category.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
                     return val
                   }
                 })
@@ -318,7 +319,7 @@ export default function Shopping() {
                 .filter((val) => {
                   if (searchValue == "") {
                     return val
-                  } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
+                  } else if (val.title.toLowerCase().includes(searchValue.toLowerCase()) || val.category.toLowerCase().includes(searchValue.toLowerCase()) || val.desc.toLowerCase().includes(searchValue.toLowerCase())) {
                     return val
                   }
                 })

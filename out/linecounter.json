@@ -708,6 +708,712 @@
                     "filename": "y"
                 }
             ]
+        },
+        {
+            "version": "0.2.7",
+            "counttime": "2023-01-08 15:14:57",
+            "filesum": 98,
+            "codesum": 3848,
+            "commentsum": 453,
+            "blanksum": 584,
+            "statistics": {
+                ".json": {
+                    "code": 174,
+                    "comment": 0,
+                    "blank": 5
+                },
+                ".rules": {
+                    "code": 9,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".md": {
+                    "code": 3,
+                    "comment": 0,
+                    "blank": 1
+                },
+                "": {
+                    "code": 9,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".svg": {
+                    "code": 4,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".js": {
+                    "code": 3012,
+                    "comment": 129,
+                    "blank": 473
+                },
+                ".html": {
+                    "code": 79,
+                    "comment": 23,
+                    "blank": 2
+                },
+                ".css": {
+                    "code": 459,
+                    "comment": 2,
+                    "blank": 78
+                },
+                ".cache": {
+                    "code": 62,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".yml": {
+                    "code": 35,
+                    "comment": 2,
+                    "blank": 2
+                },
+                ".txt": {
+                    "code": 0,
+                    "comment": 297,
+                    "blank": 23
+                },
+                ".map": {
+                    "code": 2,
+                    "comment": 0,
+                    "blank": 0
+                }
+            },
+            "filelist": [
+                {
+                    "blank": 0,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": ".firebase\\hosting.cHVibGlj.cache"
+                },
+                {
+                    "blank": 0,
+                    "code": 50,
+                    "comment": 0,
+                    "filename": ".firebase\\hosting.YnVpbGQ.cache"
+                },
+                {
+                    "blank": 0,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": ".firebaserc"
+                },
+                {
+                    "blank": 1,
+                    "code": 19,
+                    "comment": 1,
+                    "filename": ".github\\workflows\\firebase-hosting-merge.yml"
+                },
+                {
+                    "blank": 1,
+                    "code": 16,
+                    "comment": 1,
+                    "filename": ".github\\workflows\\firebase-hosting-pull-request.yml"
+                },
+                {
+                    "blank": 1,
+                    "code": 29,
+                    "comment": 0,
+                    "filename": "build\\404.html"
+                },
+                {
+                    "blank": 1,
+                    "code": 44,
+                    "comment": 0,
+                    "filename": "build\\asset-manifest.json"
+                },
+                {
+                    "filename": "build\\bikerides-group-thumbnail.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\bikerides-logo.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "build\\bikerides-logo.svg"
+                },
+                {
+                    "filename": "build\\default-thumbnail.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\favicon.ico",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "build\\google.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "build\\index.html"
+                },
+                {
+                    "filename": "build\\logo192.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\logo512.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 25,
+                    "comment": 0,
+                    "filename": "build\\manifest.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 2,
+                    "filename": "build\\static\\css\\main.d5919591.css"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "build\\static\\css\\main.d5919591.css.map"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 3,
+                    "filename": "build\\static\\js\\main.38038d52.js"
+                },
+                {
+                    "blank": 23,
+                    "code": 0,
+                    "comment": 297,
+                    "filename": "build\\static\\js\\main.38038d52.js.LICENSE.txt"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "build\\static\\js\\main.38038d52.js.map"
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-all-300-normal.168d6383e73339293ac3.woff",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-all-400-normal.c5d001fa922fa66a147f.woff",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-all-500-normal.0ab669b7a0d19b178f57.woff",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-all-700-normal.a457fde362a540fcadff.woff",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-300-normal.1431d1cef06ad04f5458.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-400-normal.71a33b6b50457b2c903a.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-500-normal.cad7d3d9cb265e334e58.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-700-normal.d010f1f324e111a22e53.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-ext-300-normal.4777461b144e55145268.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-ext-400-normal.804378952da8a10faae2.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-ext-500-normal.62ced72e5832f02c2796.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-cyrillic-ext-700-normal.be4d02458ce53887dc37.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-300-normal.db2632771401f61463fe.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-400-normal.c35e4c3958e209d17b31.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-500-normal.9ac81fefbe6c319ea40b.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-700-normal.50e795c1345353b0e996.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-ext-300-normal.35b9d6be04b95f0f0530.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-ext-400-normal.169619821ea93019d1bb.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-ext-500-normal.6fb9cffb1d3e72bf9293.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-greek-ext-700-normal.bd9854c751441ccc1a70.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-300-normal.c48fb6765a9fcb00b330.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-400-normal.b009a76ad6afe4ebd301.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-500-normal.f25d774ecfe0996f8eb5.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-700-normal.227c93190fe7f82de3f8.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-ext-300-normal.dc7dcec8e3f654e0ed63.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-ext-400-normal.861b791f9de857a6e7bc.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-ext-500-normal.9165081d10e1ba601384.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-latin-ext-700-normal.ed67ad54b1a8f5d21150.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-vietnamese-300-normal.32fc45a3d1e8ea11fabc.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-vietnamese-400-normal.3230f9b040f3c630e0c3.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-vietnamese-500-normal.d8642a3d1d4ef6179644.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\static\\media\\roboto-vietnamese-700-normal.3425a701027d0699e369.woff2",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "build\\trek-madone.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "firebase.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 4,
+                    "comment": 0,
+                    "filename": "firestore.indexes.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "firestore.rules"
+                },
+                {
+                    "blank": 3,
+                    "code": 57,
+                    "comment": 0,
+                    "filename": "package.json"
+                },
+                {
+                    "blank": 1,
+                    "code": 29,
+                    "comment": 0,
+                    "filename": "public\\404.html"
+                },
+                {
+                    "filename": "public\\bikerides-group-thumbnail.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\bikerides-logo.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "public\\bikerides-logo.svg"
+                },
+                {
+                    "filename": "public\\default-thumbnail.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\favicon.ico",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "public\\google.svg"
+                },
+                {
+                    "blank": 0,
+                    "code": 20,
+                    "comment": 23,
+                    "filename": "public\\index.html"
+                },
+                {
+                    "filename": "public\\logo192.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "public\\logo512.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 25,
+                    "comment": 0,
+                    "filename": "public\\manifest.json"
+                },
+                {
+                    "filename": "public\\trek-madone.jpg",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 15,
+                    "code": 39,
+                    "comment": 0,
+                    "filename": "src\\App.js"
+                },
+                {
+                    "blank": 37,
+                    "code": 209,
+                    "comment": 0,
+                    "filename": "src\\Assets\\Styles\\main.css"
+                },
+                {
+                    "blank": 41,
+                    "code": 249,
+                    "comment": 0,
+                    "filename": "src\\Assets\\Styles\\styles.css"
+                },
+                {
+                    "blank": 12,
+                    "code": 91,
+                    "comment": 5,
+                    "filename": "src\\Components\\Card.js"
+                },
+                {
+                    "blank": 19,
+                    "code": 90,
+                    "comment": 4,
+                    "filename": "src\\Components\\GroupCard.js"
+                },
+                {
+                    "blank": 8,
+                    "code": 48,
+                    "comment": 0,
+                    "filename": "src\\Components\\Hero.js"
+                },
+                {
+                    "blank": 34,
+                    "code": 220,
+                    "comment": 5,
+                    "filename": "src\\Components\\Navbar.js"
+                },
+                {
+                    "blank": 7,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\Components\\Pagination.js"
+                },
+                {
+                    "blank": 3,
+                    "code": 28,
+                    "comment": 0,
+                    "filename": "src\\Components\\SplashScreen.js"
+                },
+                {
+                    "blank": 12,
+                    "code": 45,
+                    "comment": 5,
+                    "filename": "src\\Config\\AuthContext.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "src\\Config\\AuthenticatedRoute.js"
+                },
+                {
+                    "blank": 8,
+                    "code": 20,
+                    "comment": 2,
+                    "filename": "src\\Config\\firebase-config.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 11,
+                    "comment": 1,
+                    "filename": "src\\Config\\PrivateRoute.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\index.js"
+                },
+                {
+                    "blank": 19,
+                    "code": 104,
+                    "comment": 0,
+                    "filename": "src\\Pages\\About.js"
+                },
+                {
+                    "blank": 6,
+                    "code": 25,
+                    "comment": 4,
+                    "filename": "src\\Pages\\Auth.js"
+                },
+                {
+                    "blank": 79,
+                    "code": 332,
+                    "comment": 21,
+                    "filename": "src\\Pages\\GroupItem.js"
+                },
+                {
+                    "blank": 28,
+                    "code": 180,
+                    "comment": 12,
+                    "filename": "src\\Pages\\Groups.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 30,
+                    "comment": 2,
+                    "filename": "src\\Pages\\Home.js"
+                },
+                {
+                    "blank": 1,
+                    "code": 6,
+                    "comment": 0,
+                    "filename": "src\\Pages\\PageNotFound.js"
+                },
+                {
+                    "blank": 72,
+                    "code": 866,
+                    "comment": 32,
+                    "filename": "src\\Pages\\Profile.js"
+                },
+                {
+                    "blank": 57,
+                    "code": 293,
+                    "comment": 11,
+                    "filename": "src\\Pages\\Shopping.js"
+                },
+                {
+                    "blank": 44,
+                    "code": 228,
+                    "comment": 6,
+                    "filename": "src\\Pages\\ShoppingItem.js"
+                },
+                {
+                    "blank": 18,
+                    "code": 159,
+                    "comment": 13,
+                    "filename": "src\\Pages\\SignIn.js"
+                },
+                {
+                    "blank": 12,
+                    "code": 149,
+                    "comment": 3,
+                    "filename": "src\\Pages\\SignUp.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 4,
+                    "comment": 0,
+                    "filename": "y"
+                }
+            ]
         }
     ]
 }
