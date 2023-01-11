@@ -26,7 +26,7 @@ import { blue } from '@mui/material/colors';
 export default function Navbar() {
 
     const location = useLocation();
-    
+
     const navRef = useRef();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -123,16 +123,16 @@ export default function Navbar() {
             </List>
             <Divider />
             <List>
-  
+
                 <ListItem onClick={navigateToProfile}>
                     <ListItemButton >
                         <ListItemIcon>
-                                <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar>
+                            <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar>
                         </ListItemIcon>
                         <ListItemText primary="Profile" />
                     </ListItemButton>
                 </ListItem>
-    
+
                 <ListItem onClick={handleLogout}>
                     <ListItemButton >
                         <ListItemIcon>
@@ -218,7 +218,7 @@ export default function Navbar() {
                         <Avatar sx={{ bgcolor: blue[500], width: 32, height: 32 }} src={user && user.photoURL ? user.photoURL : ""}>{user ? (user.displayName ? user.displayName.charAt(0).toUpperCase() : null) : null}</Avatar> Profile
                     </MenuItem>
 
-                    <Divider/>
+                    <Divider />
                     <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                             <Logout fontSize="small" />

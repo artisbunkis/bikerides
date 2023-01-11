@@ -111,7 +111,8 @@ export default function GroupItem({ route, navigate }) {
         const docsData = onSnapshot(gr, (querySnapshot) => {
                 // Ja ir akceptēts, tad aizpilda mainīgo:
             if (querySnapshot.size == 0) {
-                setIsRequested(false)
+                setIsRequested(false);
+                setIsAccepted(false);
             } else {
                 setIsRequested(true)
                 setIsAccepted(querySnapshot.docs[0].data().request_accepted);
@@ -275,6 +276,7 @@ export default function GroupItem({ route, navigate }) {
         getData();
         getRequests();
         getGroupUsers();
+        console.log(isAccepted)
     }, [])
 
     return (

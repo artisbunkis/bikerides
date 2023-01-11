@@ -70,7 +70,7 @@ function SimpleDialog(props) {
     setLoading(true);
 
     // Sets initial data in groups collection for group with id:
-    await uploadBytes(ref(storage, `shoppingImages/${user.uid}/${selectedFile.name}`), selectedFile).then((snapshot) => {
+    await uploadBytes(ref(storage, `shoppingImages/${user.uid}/${selectedFile.name}_${(Math.random() + 1).toString(36).substring(7)}`), selectedFile).then((snapshot) => {
       getDownloadURL(snapshot.ref).then(urlis =>
         addDoc(collection(db, "shopping"), {
           title: title,

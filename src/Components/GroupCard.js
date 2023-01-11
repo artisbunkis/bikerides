@@ -18,13 +18,18 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function GroupCard(props) {
 
+    // Grupas datu mainīgais un tā ievades funkcija:
     const [groupData, setGroupData] = useState([null]);
 
     const navigate = useNavigate();
+
+    // Grupas kartiņas atvēršanas funkcija:
     const handleOnClick = useCallback(() => navigate(`/Group/${props.group_id}`, { state: { title: props.title, group_id: props.group_id } }, { replace: true }), [navigate]);
 
+    // Lādēšanās mainīgais un tā ievades funkcija:
     const [loading, setLoading] = useState(true);
 
+    // Preview attēla mainīgais un tā ievades funkcija:
     const [imageIsLoading, setImageIsLoading] = useState(true);
     const [image, setImage] = useState({});
     
